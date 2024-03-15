@@ -11,9 +11,16 @@ import { store } from "../../store";
 export function App() {
   return (
     <main>
-      <Provider store={store}>
-        <MetaMaskProvider
-          debug={false}
+      <MetaMaskProvider
+        debug={false}
+        sdkOptions={{
+          dappMetadata: {
+            name: "Lending Borrowing Dapp",
+            url: window.location.href,
+          },
+        }}
+      >
+        <MetaMaskUIProvider
           sdkOptions={{
             dappMetadata: {
               name: "Lending Borrowing Dapp",
@@ -21,27 +28,20 @@ export function App() {
             },
           }}
         >
-          <MetaMaskUIProvider
-            sdkOptions={{
-              dappMetadata: {
-                name: "Lending Borrowing Dapp",
-                url: window.location.href,
-              },
-            }}
-          >
+          <Provider store={store}>
             <RootLayout>
               <Grid container spacing={2}>
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} md={6}>
                   <SupplyMarket />
                 </Grid>
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} md={6}>
                   <p>List</p>
                 </Grid>
               </Grid>
             </RootLayout>
-          </MetaMaskUIProvider>
-        </MetaMaskProvider>
-      </Provider>
+          </Provider>
+        </MetaMaskUIProvider>
+      </MetaMaskProvider>
     </main>
   );
 }

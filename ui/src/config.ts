@@ -35,7 +35,7 @@ export interface AppConfig {
 }
 
 export const CurrentConfig: AppConfig = {
-  env: Environment.LOCAL,
+  env: Environment.WALLET_EXTENSION,
   rpc: {
     local: "http://localhost:8545",
     mainnet: "",

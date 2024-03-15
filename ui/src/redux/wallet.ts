@@ -22,48 +22,66 @@ export const walletSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
+    clearWalletAddress: (state) => {
+      state.address = undefined;
+      state.balances = {};
+      state.readableBalances = {};
+    },
     updateWalletAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchERC20Balance.fulfilled, (state, action) => {
-      const {
-        walletAddress,
-        contractAddress,
-        balanceOfAddress,
-        readableBalance,
-      } = action.payload;
-      // Only update when the wallet address matches with the connected wallet address
-      if (walletAddress !== state.address) {
-        return;
-      }
+      const { contractAddress, balanceOfAddress, readableBalance } =
+        action.payload;
       state.balances[contractAddress] = balanceOfAddress;
       state.readableBalances[contractAddress] = readableBalance;
     });
+    builder.addCase(fetchERC20Balance.rejected, () => {});
+  },
+  selectors: {
+    getReadableBalance: (state, contractAddress: string) => {
+      return state.readableBalances[contractAddress];
+    },
+    getAllReadableBalances: (state) => {
+      return state.readableBalances;
+    },
+    getAddress: (state) => {
+      return state.address;
+    },
   },
 });
 
-export const fetchERC20Balance = createAsyncThunk(
-  "wallet/fetchBalance",
-  async ({
-    walletAddress,
-    contractAddress,
-  }: {
-    walletAddress: string;
+export const fetchERC20Balance = createAsyncThunk<
+  {
     contractAddress: string;
-  }) => {
+    balanceOfAddress: number;
+    readableBalance: string;
+  },
+  { contractAddress: string },
+  { state: { wallet: WalletState } }
+>(
+  "wallet/fetchBalance",
+  async ({ contractAddress }, { getState, rejectWithValue }) => {
+    if (!contractAddress) {
+      return rejectWithValue({ error: "No contract address provided" });
+    }
     const provider = getProvider();
+
+    const walletAddress = getState().wallet.address;
+    if (!walletAddress) {
+      return rejectWithValue({ error: "No contract address provided" });
+    }
 
     const erc20Contract = getErc20Contract(contractAddress, provider);
     const decimals: number = await erc20Contract.decimals();
     const balanceOfAddress: number =
-      await erc20Contract.balanceOf(contractAddress);
+      await erc20Contract.balanceOf(walletAddress);
 
     const readableBalance = toReadableAmount(balanceOfAddress, decimals);
 
     return {
-      walletAddress,
       contractAddress,
       balanceOfAddress,
       readableBalance,
