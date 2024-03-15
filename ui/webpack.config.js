@@ -16,16 +16,26 @@ module.exports = {
       },
       {
         test: /\.(ts|tsx)$/,
+        exclude: /^node_modules/,
         loader: "ts-loader",
+        options: {
+          configFile: "../tsconfig.json",
+        },
       },
-      { test: /\.s?css$/, use: [ 
-        { loader: "style-loader" },  // to inject the result into the DOM as a style block
-        { loader: "css-loader", options: { modules: true } }, 
-    ] }
+      {
+        test: /\.s?css$/,
+        use: [
+          { loader: "style-loader" }, // to inject the result into the DOM as a style block
+          { loader: "css-loader", options: { modules: true } },
+        ],
+      },
     ],
   },
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
