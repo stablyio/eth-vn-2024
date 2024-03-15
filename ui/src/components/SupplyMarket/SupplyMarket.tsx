@@ -17,8 +17,12 @@ const Item = styled(Box)(({ theme }) => ({
 
 export function SupplyMarket() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [selectedContractAddress, setSelectedContractAddress] = React.useState("");
+
+  const supplyOnClick = (contractAddress: string) => {
+    console.log("supplyOnClick", contractAddress);
+  }
 
   return (
     <div>
@@ -43,8 +47,8 @@ export function SupplyMarket() {
         </Grid>
       </div>
       <div>
-        <UniswapV3LPList uniswapV3LPList={CurrentConfig.uniswapV3LP} lpOnClick={() => {}} /> 
-        <SupplyModal isOpen={open} handleClose={handleClose} />
+        <UniswapV3LPList uniswapV3LPList={CurrentConfig.uniswapV3LP} supplyOnClick={supplyOnClick} /> 
+        <SupplyModal isOpen={open} handleClose={handleClose} contractAddress={selectedContractAddress} />
       </div>
     </div>
   );

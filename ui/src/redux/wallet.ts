@@ -44,6 +44,9 @@ export const walletSlice = createSlice({
     getReadableBalance: (state, contractAddress: string) => {
       return state.readableBalances[contractAddress];
     },
+    getAllBalances: (state) => {
+      return state.balances;
+    },
     getAllReadableBalances: (state) => {
       return state.readableBalances;
     },
@@ -76,14 +79,15 @@ export const fetchERC20Balance = createAsyncThunk<
 
     const erc20Contract = getErc20Contract(contractAddress, provider);
     const decimals: number = await erc20Contract.decimals();
-    const balanceOfAddress: number =
+    const balanceOfAddress: BigNumber =
       await erc20Contract.balanceOf(walletAddress);
 
-    const readableBalance = toReadableAmount(balanceOfAddress, decimals);
+    const balanceOfAddressNumber = balanceOfAddress.toNumber();
+    const readableBalance = toReadableAmount(balanceOfAddressNumber, decimals);
 
     return {
       contractAddress,
-      balanceOfAddress,
+      balanceOfAddress: balanceOfAddressNumber,
       readableBalance,
     };
   }

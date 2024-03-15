@@ -7,13 +7,16 @@ import { fetchERC20Balance, walletSlice } from "@/redux/wallet";
 
 export interface UniswapV3LPListProps {
   uniswapV3LPList: UniswapV3LP[];
-  lpOnClick: () => void;
+  supplyOnClick: (contractAddress: string) => void;
 }
 
 export function useUniswapV3LPList(uniswapV3LPList: UniswapV3LP[]) {
   const dispatch = useAppDispatch();
   const allReadableBalances = useAppSelector((state) =>
     walletSlice.selectors.getAllReadableBalances(state)
+  );
+  const allBalances = useAppSelector((state) =>
+    walletSlice.selectors.getAllBalances(state)
   );
   const walletAddress = useAppSelector((state) =>
     walletSlice.selectors.getAddress(state)
@@ -32,14 +35,14 @@ export function useUniswapV3LPList(uniswapV3LPList: UniswapV3LP[]) {
     });
   }, [allReadableBalances, walletAddress]);
 
-  return { allReadableBalances };
+  return { allBalances, allReadableBalances };
 }
 
 export function UniswapV3LPList({
   uniswapV3LPList,
-  lpOnClick,
+  supplyOnClick,
 }: UniswapV3LPListProps) {
-  const { allReadableBalances } = useUniswapV3LPList(uniswapV3LPList);
+  const { allBalances, allReadableBalances } = useUniswapV3LPList(uniswapV3LPList);
 
   return (
     <div>
@@ -58,7 +61,12 @@ export function UniswapV3LPList({
               {allReadableBalances[uniswapV3LP.address] ?? "-"}
             </Grid>
             <Grid item xs={3}>
-              <Button variant="contained" color="primary" onClick={lpOnClick}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!allBalances[uniswapV3LP.address]}
+                onClick={() => supplyOnClick(uniswapV3LP.address)}
+              >
                 Supply
               </Button>
             </Grid>

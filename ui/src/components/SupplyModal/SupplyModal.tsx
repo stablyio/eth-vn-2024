@@ -1,5 +1,7 @@
 import { Box, Modal } from "@mui/material";
 import { SupplyForm } from "./SupplyForm";
+import { useAppSelector } from "@/store";
+import { walletSlice } from "@/redux/wallet";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,9 +18,19 @@ const style = {
 export interface SupplyModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  contractAddress: string;
 }
 
-export function SupplyModal({ isOpen, handleClose }: SupplyModalProps) {
+export function SupplyModal({
+  isOpen,
+  handleClose,
+  contractAddress,
+}: SupplyModalProps) {
+  // Get the ERC20 balance of the connected wallet
+  const balanceOfAddress = useAppSelector((state) =>
+    walletSlice.selectors.getReadableBalance(state, contractAddress)
+  );
+
   return (
     <Modal
       open={isOpen}
@@ -27,7 +39,7 @@ export function SupplyModal({ isOpen, handleClose }: SupplyModalProps) {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <SupplyForm />
+        <SupplyForm availableAmount={balanceOfAddress} />
       </Box>
     </Modal>
   );

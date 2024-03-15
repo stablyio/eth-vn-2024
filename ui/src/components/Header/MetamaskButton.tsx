@@ -15,7 +15,6 @@ export function MetamaskButton() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("account", account);
     if (account) {
       dispatch(walletSlice.actions.updateWalletAddress(account));
     }
