@@ -29,18 +29,22 @@ module.exports = {
           { loader: "css-loader", options: { modules: true } },
         ],
       },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack", "url-loader"],
+      },
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".css", ".svg"],
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-    }
+      "@": path.resolve(__dirname, "src"),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html"),
-    }),
+    })
   ],
   devServer: {
     static: {
