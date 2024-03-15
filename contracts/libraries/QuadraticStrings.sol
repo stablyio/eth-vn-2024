@@ -52,7 +52,10 @@ library QuadraticStrings {
     /**
      * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.
      */
-    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+    function toHexString(
+        uint256 value,
+        uint256 length
+    ) internal pure returns (string memory) {
         bytes memory buffer = new bytes(2 * length + 2);
         buffer[0] = "0";
         buffer[1] = "x";
@@ -63,25 +66,26 @@ library QuadraticStrings {
         require(value == 0, "Strings: hex length insufficient");
         return string(buffer);
     }
-    
-    function concat(string memory a, string memory b)
-        internal pure returns(string memory) {
-            
+
+    function concat(
+        string memory a,
+        string memory b
+    ) internal pure returns (string memory) {
         bytes memory ba = bytes(a);
         bytes memory bb = bytes(b);
         bytes memory bc = new bytes(ba.length + bb.length);
-        
+
         uint256 bal = ba.length;
         uint256 bbl = bb.length;
         uint256 k = 0;
-        
+
         for (uint256 i = 0; i != bal; ++i) {
             bc[k++] = ba[i];
         }
         for (uint256 i = 0; i != bbl; ++i) {
             bc[k++] = bb[i];
         }
-        
+
         return string(bc);
     }
 }

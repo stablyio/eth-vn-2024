@@ -1,17 +1,17 @@
 pragma solidity ^0.8.0;
 // SPDX-License-Identifier: SimPL-2.0
 
-interface IQuadraticBorrowCompoundStorage{
+interface IQuadraticBorrowCompoundStorage {
     struct BorrowUserInfo {
         uint256 currTotalBorrow;
     }
-    
-    struct UserApplyRate{
+
+    struct UserApplyRate {
         address apply721Address;
         uint256 specialMaxRate;
         uint256 tokenId;
     }
-    
+
     struct BorrowInfo {
         address user;
         uint256 pid;
@@ -26,9 +26,9 @@ interface IQuadraticBorrowCompoundStorage{
         uint256 startBlock;
         uint256 returnBlock;
         uint256 interests;
-        uint256 state;      //0.init 1.borrowing 2.return 8.settlement 9.overdue
+        uint256 state; //0.init 1.borrowing 2.return 8.settlement 9.overdue
     }
-    
+
     struct CompoundBorrowPool {
         address token;
         address ctoken;
@@ -40,10 +40,9 @@ interface IQuadraticBorrowCompoundStorage{
         uint256 totalMineInterests;
         uint256 overdueRate;
     }
-    
-    struct Special721Info{
+
+    struct Special721Info {
         string name;
         uint256 rate;
     }
-    
 }

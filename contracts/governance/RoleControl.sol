@@ -5,15 +5,18 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./Governance.sol";
 
-contract RoleControl is Governance,Pausable,ReentrancyGuard{
-
-        /**
+contract RoleControl is Governance, Pausable, ReentrancyGuard {
+    /**
      * @dev Emitted when `account` is granted `role`.
      *
      * `sender` is the account that originated the contract call, an admin role
      * bearer except when using {AccessControl-_setupRole}.
      */
-    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);
+    event RoleGranted(
+        bytes32 indexed role,
+        address indexed account,
+        address indexed sender
+    );
 
     /**
      * @dev Emitted when `account` is revoked `role`.
@@ -22,17 +25,21 @@ contract RoleControl is Governance,Pausable,ReentrancyGuard{
      *   - if using `revokeRole`, it is the admin role bearer
      *   - if using `renounceRole`, it is the role bearer (i.e. `account`)
      */
-    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
+    event RoleRevoked(
+        bytes32 indexed role,
+        address indexed account,
+        address indexed sender
+    );
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    
+
     mapping(bytes32 => mapping(address => bool)) private _roles; // rule name => address => flag
 
     modifier onlyRole(bytes32 role) {
-        require(hasRole(role, msg.sender) ,"account is missing role.");
+        require(hasRole(role, msg.sender), "account is missing role.");
         _;
     }
-        /**
+    /**
      * @dev Returns `true` if `account` has been granted `role`.
      */
     function hasRole(bytes32 role, address account) public view returns (bool) {
@@ -66,8 +73,6 @@ contract RoleControl is Governance,Pausable,ReentrancyGuard{
         _revokeRole(role, account);
     }
 
-
-
     function pause() external onlyRole(PAUSER_ROLE) {
         _pause();
     }
@@ -76,7 +81,7 @@ contract RoleControl is Governance,Pausable,ReentrancyGuard{
         _unpause();
     }
 
-        /**
+    /**
      * @dev Grants `role` to `account`.
      *
      * Internal function without access restriction.
@@ -99,6 +104,4 @@ contract RoleControl is Governance,Pausable,ReentrancyGuard{
             emit RoleRevoked(role, account, msg.sender);
         }
     }
-
-
 }

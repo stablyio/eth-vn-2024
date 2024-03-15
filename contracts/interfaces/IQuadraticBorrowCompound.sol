@@ -4,18 +4,34 @@ pragma experimental ABIEncoderV2;
 
 import "./IQuadraticBorrowCompoundStorage.sol";
 
-
-interface IQuadraticBorrowCompound is IQuadraticBorrowCompoundStorage{
-
-    function borrowPoolInfo(uint256 pid) external view returns(CompoundBorrowPool memory borrowPool);
-    function borrowInfo(uint256 bid) external view returns(BorrowInfo memory borrow);
+interface IQuadraticBorrowCompound is IQuadraticBorrowCompoundStorage {
+    function borrowPoolInfo(
+        uint256 pid
+    ) external view returns (CompoundBorrowPool memory borrowPool);
+    function borrowInfo(
+        uint256 bid
+    ) external view returns (BorrowInfo memory borrow);
     function settlementBorrow(uint256 bid) external;
-    function doAfterLpTransfer(address ctoken,address sender,address recipient, uint256 amount) external;
+    function doAfterLpTransfer(
+        address ctoken,
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external;
     function updateBorrowPool(uint256 pid) external;
-    function addBorrowPool(address borrowToken,address ctoken) external;
-    function getGlobalLendInterestShare(uint256 pid) external view returns(uint256 globalLendInterestShare);
-    function transferInterestToLend(uint256 pid,address toUser,uint256 interests) external;
-    function getBorrowingRate(uint256 pid) external view returns(uint256);
-    function getLendingRate(uint256 pid) external view returns(uint256);
-    function borrowUserInfos(address user,uint256 pid) external view returns(BorrowUserInfo memory borrowUserInfo);
+    function addBorrowPool(address borrowToken, address ctoken) external;
+    function getGlobalLendInterestShare(
+        uint256 pid
+    ) external view returns (uint256 globalLendInterestShare);
+    function transferInterestToLend(
+        uint256 pid,
+        address toUser,
+        uint256 interests
+    ) external;
+    function getBorrowingRate(uint256 pid) external view returns (uint256);
+    function getLendingRate(uint256 pid) external view returns (uint256);
+    function borrowUserInfos(
+        address user,
+        uint256 pid
+    ) external view returns (BorrowUserInfo memory borrowUserInfo);
 }

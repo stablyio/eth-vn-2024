@@ -5,7 +5,6 @@ pragma solidity >=0.6.2 <0.8.0;
 
 import "openzeppelin-contracts-legacy/utils/Address.sol";
 
-
 /**
  * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed
  * behind a proxy. Since a proxied contract can't have a constructor, it's common to move constructor logic to an
@@ -51,7 +50,10 @@ abstract contract Initializable {
         // If the contract is initializing we ignore whether _initialized is set in order to support multiple
         // inheritance patterns, but we only do this in the context of a constructor, because in other contexts the
         // contract may have been reentered.
-        require(_initializing ? _isConstructor() : !_initialized, "Initializable: contract is already initialized");
+        require(
+            _initializing ? _isConstructor() : !_initialized,
+            "Initializable: contract is already initialized"
+        );
 
         bool isTopLevelCall = !_initializing;
         if (isTopLevelCall) {
