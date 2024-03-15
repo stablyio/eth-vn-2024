@@ -24,7 +24,7 @@ deploy:
 		exit 1; \
 	fi
 	@echo "Deploying..."
-	@yarn hardhat ignition deploy ${IGNITION_PATH} --network $(network)
+	@yarn hardhat ignition deploy --reset ${IGNITION_PATH} --network $(network)
 
 deploy.local: network=localhost
 deploy.local: deploy
