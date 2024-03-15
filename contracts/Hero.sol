@@ -5,7 +5,7 @@ contract Hero{
     address owner;
     string hero;
     constructor(string memory _hero)
-    {
+    { 
         owner=msg.sender;
         hero=_hero;
     }
