@@ -55,7 +55,7 @@ const mainnetProvider = new ethers.providers.JsonRpcProvider(
     }
   
     const { ethereum } = window
-    const provider = new ethers.providers.Web3Provider(ethereum)
+    const provider = new ethers.providers.Web3Provider(ethereum as any)
     const accounts = await provider.send('eth_requestAccounts', [])
   
     if (accounts.length !== 1) {
@@ -78,7 +78,7 @@ const mainnetProvider = new ethers.providers.JsonRpcProvider(
   
   function createBrowserExtensionProvider(): ethers.providers.Web3Provider | null {
     try {
-      return new ethers.providers.Web3Provider(window?.ethereum, 'any')
+      return new ethers.providers.Web3Provider(window?.ethereum as any, 'any')
     } catch (e) {
       console.log('No Wallet Extension Found')
       return null
