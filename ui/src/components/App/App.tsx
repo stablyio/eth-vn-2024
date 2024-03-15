@@ -1,7 +1,9 @@
 import React from "react";
 import RootLayout from "./layout";
 import styles from "./app.module.css";
+import { MetaMaskProvider } from "@metamask/sdk-react";
 import { MetaMaskUIProvider } from "@metamask/sdk-react-ui";
+
 import { Grid } from "@mui/material";
 import { SupplyMarket } from "../SupplyMarket";
 
@@ -9,26 +11,35 @@ import { SupplyMarket } from "../SupplyMarket";
 export function App() {
   return (
     <main>
-      <MetaMaskUIProvider
+      <MetaMaskProvider
+        debug={false}
         sdkOptions={{
           dappMetadata: {
-            name: "Example React UI Dapp",
+            name: "Lending Borrowing Dapp",
             url: window.location.href,
           },
-          // Other options
         }}
       >
-        <RootLayout>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={6}>
-              <SupplyMarket /> 
+        <MetaMaskUIProvider
+          sdkOptions={{
+            dappMetadata: {
+              name: "Lending Borrowing Dapp",
+              url: window.location.href,
+            },
+          }}
+        >
+          <RootLayout>
+            <Grid container spacing={2}>
+              <Grid item xs={6} md={6}>
+                <SupplyMarket />
+              </Grid>
+              <Grid item xs={6} md={6}>
+                <p>List</p>
+              </Grid>
             </Grid>
-            <Grid item xs={6} md={6}>
-              <p>List</p>
-            </Grid>
-          </Grid>
-        </RootLayout>
-      </MetaMaskUIProvider>
+          </RootLayout>
+        </MetaMaskUIProvider>
+      </MetaMaskProvider>
     </main>
   );
 }
