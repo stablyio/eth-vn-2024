@@ -15,6 +15,7 @@ contract Hero{
         require(msg.sender==owner,"Not the owner");
         hero =_hero;
     }
+
     function getHero() public view returns(string memory)
     {
         return hero;
