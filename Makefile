@@ -1,11 +1,10 @@
 install:
-	@echo 
-	@sudo npm install -g truffle
-	@npm install --save-dev prettier prettier-plugin-solidity
+	@echo "Installing"
+	@yarn install
 
-truffle.init:
-	@echo "Initializing truffle project..."
-	@truffle init
+hardhat.init:
+	@echo "Initializing hardhat project..."
+	@yarn hardhat init
 
 lint:
 	@echo "Reformatting..."
