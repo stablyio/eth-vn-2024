@@ -1,6 +1,4 @@
-"use client"
-import { Box } from "@mui/material"
-import "./globals.css";
+import { Box } from "@mui/material";
 import { Header } from "../Header";
 
 export default function RootLayout({
@@ -9,15 +7,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <Box
+    <Box
       sx={{
         display: "flex",
-        justifyContent: "space-between",
         flexDirection: "column",
         minHeight: "100vh",
+        marginLeft: "30px",
+        marginRight: "30px",
       }}
     >
-      <Header position={"absolute"} />
+      <Header />
       {children}
     </Box>
   );
