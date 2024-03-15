@@ -25,3 +25,10 @@ deploy:
 	fi
 	@echo "Deploying..."
 	@yarn hardhat ignition deploy ${IGNITION_PATH} --network $(network)
+
+deploy.local: network=localhost
+deploy.local: deploy
+
+run.local-node:
+	@echo "Running local node..."
+	@yarn hardhat node
