@@ -18,3 +18,4 @@ typechain-types
 # Hardhat files
 cache
 ignition/deployments
+artifacts/build-info
