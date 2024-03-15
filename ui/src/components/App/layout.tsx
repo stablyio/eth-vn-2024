@@ -9,8 +9,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
       <Box
       sx={{
         display: "flex",
@@ -22,7 +20,5 @@ export default function RootLayout({
       <Header position={"absolute"} />
       {children}
     </Box>
-      </body>
-    </html>
   );
 }

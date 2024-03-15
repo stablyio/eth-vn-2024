@@ -18,6 +18,7 @@ export interface AppConfig {
         address: string
     },
     lineaNetworkConfig: {
+        networkName: string
         chainID: number
         rpcURL: string
     }
@@ -38,6 +39,7 @@ export const CurrentConfig: AppConfig = {
         address: '',
     },
     lineaNetworkConfig: {
+        networkName: 'Linea Testnet',
         chainID: 59140,
         rpcURL: 'https://linea-goerli.blockpi.network/v1/rpc/public',
     }

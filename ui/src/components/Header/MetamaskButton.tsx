@@ -1,33 +1,13 @@
-import { useState } from "react";
-import { useSDK } from "@metamask/sdk-react";
+import { useEffect } from "react";
+import { walletSwitchToLineaNetwork } from "@/libs/providers";
+import { MetaMaskButton } from "@metamask/sdk-react-ui";
 
 export function MetamaskButton() {
-    const [account, setAccount] = useState<string>();
-    const { sdk, connected, connecting, provider, chainId } = useSDK();
+  useEffect(() => {
+    walletSwitchToLineaNetwork();
+  }, []);
 
-    const connect = async () => {
-        try {
-            const accounts = await sdk?.connect();
-            setAccount(accounts?.[0]);
-        } catch (err) {
-            console.warn("failed to connect..", err);
-        }
-    };
-
-    return (
-        <div className="App">
-            <button style={{ padding: 10, margin: 10 }} onClick={connect}>
-                Connect
-            </button>
-            {connected && (
-                <div>
-                    <>
-                        {chainId && `Connected chain: ${chainId}`}
-                        <p></p>
-                        {account && `Connected account: ${account}`}
-                    </>
-                </div>
-            )}
-        </div>
-    );
+  return (
+    <MetaMaskButton></MetaMaskButton>
+  );
 }
