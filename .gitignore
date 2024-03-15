@@ -21,3 +21,6 @@ ignition/deployments
 artifacts/build-info
 
 *.dbg.json
+
+# Don't want to cache the localhost deployment
+deployments/localhost
