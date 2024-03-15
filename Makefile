@@ -11,3 +11,7 @@ lint:
 	@yarn prettier
 	@echo "Linting..."
 	@solhint "contracts/**/*.sol"
+
+compile:
+	@echo "Compiling..."
+	@yarn hardhat compile
