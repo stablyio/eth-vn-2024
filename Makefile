@@ -24,4 +24,4 @@ deploy:
 		exit 1; \
 	fi
 	@echo "Deploying..."
-	@yarn hardhat ignition deploy ${IGNITION_LINEA_TESTNET} --network $(network)
+	@yarn hardhat ignition deploy ${IGNITION_PATH} --network $(network)
