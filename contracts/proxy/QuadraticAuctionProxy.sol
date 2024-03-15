@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.so
 
 contract QuadraticAuctionProxy is TransparentUpgradeableProxy {
     address private constant initProxy =
-        0xa5D617BbCb81F05BA5A662341261402E86B215C8;
+        0x610178dA211FEF7D417bC0e6FeD39F05609AD788;
 
     constructor() TransparentUpgradeableProxy(initProxy, msg.sender, "") {}
 }
