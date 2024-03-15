@@ -7,7 +7,30 @@ import "dotenv/config";
 import { getMnemonic } from "./utils/account";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.24",
+  solidity: {
+    compilers: [
+      {
+        version: "0.6.2",
+        settings: { optimizer: { enabled: true, runs: 200 } },
+      },
+      {
+        version: "0.8.0",
+        settings: { optimizer: { enabled: true, runs: 200 } },
+      },
+      {
+        version: "0.7.5",
+        settings: { optimizer: { enabled: true, runs: 200 } },
+      },
+      {
+        version: "0.8.1",
+        settings: { optimizer: { enabled: true, runs: 200 } },
+      },
+      {
+        version: "0.8.2",
+        settings: { optimizer: { enabled: true, runs: 200 } },
+      }
+    ],
+  },
   networks: {
     linea_testnet: {
       url: "https://linea-goerli.blockpi.network/v1/rpc/public",
