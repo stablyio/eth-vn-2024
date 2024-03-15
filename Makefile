@@ -37,6 +37,9 @@ deploy-contract.reset:
 deploy-contract.local: network=localhost
 deploy-contract.local: deploy-contract
 
+deploy-contract.linea.testnet: network=linea_testnet
+deploy-contract.linea.testnet: deploy-contract
+
 run.local-node:
 	@echo "Running local node..."
 	@yarn hardhat node
