@@ -3,6 +3,8 @@
     "prettier": "prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'"
   },
   "devDependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts-upgradeable": "^4.9.3",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-ignition": "^0.15.0",
