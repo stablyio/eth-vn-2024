@@ -15,7 +15,6 @@ import "../governance/RoleControl.sol";
 import "./QuadraticFinanceToken.sol";
 
 import "../uniswap/IUniswapV3Oracle.sol";
-import "../uniswap/IUniswapV3PoolWhite.sol";
 
 import "../interfaces/IQuadraticAuction.sol";
 import "../interfaces/IQuadraticBorrowCompoundStorage.sol";
@@ -68,9 +67,6 @@ contract QuadraticBorrowCompound is IQuadraticBorrowCompoundStorage,IQuadraticLe
     
     IQuadraticLendCompound public lendCompound;
     CompoundBorrowPool[] public borrowPoolInfo;
-    
-    address[] public ______________________back;  // Invalid field, before nftV3Token0WhiteList
-    address[] public ______________________back1;  // Invalid field, before nftV3Token1WhiteList
     
     address[] public special721Arr;
     mapping(address => Special721Info) public special721Info;
@@ -130,10 +126,6 @@ contract QuadraticBorrowCompound is IQuadraticBorrowCompoundStorage,IQuadraticLe
         globalDefault = _globalDefault;
         settlementBorrowAuth[quadraticAuction] = true;
         interestPlatformRate = _interestPlatformRate;
-    }
-
-    function checkNftV3WhiteList(uint256 tokenId) public view returns(bool flag) {
-        return IUniswapV3PoolWhite(0x502f11922661D072f91b73ae981eeedB236cb944).checkV3PoolWhiteList(tokenId);
     }
 
     function changeUniswapV3Oracle(address _uniswapV3Oracle) external onlyGovernance{
@@ -247,7 +239,6 @@ contract QuadraticBorrowCompound is IQuadraticBorrowCompoundStorage,IQuadraticLe
     }
     
     function getUserMaxBorrowAmount(uint256 pid, uint256 tokenId, uint256 borrowAmount,address _user) public view returns(uint256 _maxBorrowAmount,bool _flag){
-        require(checkNftV3WhiteList(tokenId),"Borrow error.Not uniswap V3 white list NFT.");
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[pid];
 
         (uint256 _value,) = uniswapV3Oracle.getTWAPQuoteNft(tokenId, _borrowPool.token);
@@ -259,7 +250,6 @@ contract QuadraticBorrowCompound is IQuadraticBorrowCompoundStorage,IQuadraticLe
     }
     
     function v3NFTBorrow(uint256 pid, uint256 tokenId, uint256 borrowAmount) public authContractAccessChecker nonReentrant whenNotPaused {
-        require(checkNftV3WhiteList(tokenId),"Borrow error.Not uniswap V3 white list NFT.");
         BorrowUserInfo storage _user = borrowUserInfos[msg.sender][pid];
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[pid];
         checkPoolPause(_borrowPool.token);
