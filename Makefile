@@ -42,4 +42,4 @@ deploy-contract.linea.testnet: deploy-contract
 
 run.local-node:
 	@echo "Running local node..."
-	@yarn hardhat node
+	@yarn hardhat node --no-deploy
