@@ -1,3 +1,5 @@
+-include ./.env
+
 install:
 	@echo "Installing"
 	@yarn install
@@ -15,3 +17,11 @@ lint:
 compile:
 	@echo "Compiling..."
 	@yarn hardhat compile
+
+deploy:
+	@if [ "$(network)" = "" ]; then \
+		echo "Must provide 'network' argument"; \
+		exit 1; \
+	fi
+	@echo "Deploying..."
+	@yarn hardhat deploy --network linea_testnet
