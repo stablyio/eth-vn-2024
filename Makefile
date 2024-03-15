@@ -24,4 +24,4 @@ deploy:
 		exit 1; \
 	fi
 	@echo "Deploying..."
-	@yarn hardhat deploy --network linea_testnet
+	@yarn hardhat ignition deploy ./ignition/modules/Lock.ts --network $(network)
