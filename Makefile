@@ -18,24 +18,24 @@ compile:
 	@echo "Compiling..."
 	@yarn hardhat compile
 
-deploy:
+deploy-contract:
 	@if [ "$(network)" = "" ]; then \
 		echo "Must provide 'network' argument"; \
 		exit 1; \
 	fi
 	@echo "Deploying..."
-	@yarn hardhat ignition deploy ${IGNITION_PATH} --network $(network)
+	@yarn hardhat deploy --network $(network)
 
-deploy.reset:
+deploy-contract.reset:
 	@if [ "$(network)" = "" ]; then \
 		echo "Must provide 'network' argument"; \
 		exit 1; \
 	fi
 	@echo "Deploying with reset..."
-	@yarn hardhat ignition deploy --reset ${IGNITION_PATH} --network $(network)
+	@yarn hardhat deploy --reset --network $(network)
 
-deploy.local: network=localhost
-deploy.local: deploy
+deploy-contract.local: network=localhost
+deploy-contract.local: deploy-contract
 
 run.local-node:
 	@echo "Running local node..."
