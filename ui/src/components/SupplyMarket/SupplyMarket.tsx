@@ -1,7 +1,9 @@
 import React from "react";
-import { Box, Button, Grid, styled } from "@mui/material";
+import { Box, Button, Grid, Modal, styled } from "@mui/material";
 import styles from "./supplymarket.module.css";
 import { AssetBanner } from "../Asset";
+import { SupplyForm } from "../SupplyModal/SupplyForm";
+import { SupplyModal } from "../SupplyModal/SupplyModal";
 
 const Item = styled(Box)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -12,6 +14,10 @@ const Item = styled(Box)(({ theme }) => ({
 }));
 
 export function SupplyMarket() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <div>
       <h1>Supply Markets</h1>
@@ -43,11 +49,12 @@ export function SupplyMarket() {
             -
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleOpen}>
               Supply
             </Button>
           </Grid>
         </Grid>
+        <SupplyModal isOpen={open} handleClose={handleClose} />
       </div>
     </div>
   );
