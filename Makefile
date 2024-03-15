@@ -24,6 +24,14 @@ deploy:
 		exit 1; \
 	fi
 	@echo "Deploying..."
+	@yarn hardhat ignition deploy ${IGNITION_PATH} --network $(network)
+
+deploy.reset:
+	@if [ "$(network)" = "" ]; then \
+		echo "Must provide 'network' argument"; \
+		exit 1; \
+	fi
+	@echo "Deploying with reset..."
 	@yarn hardhat ignition deploy --reset ${IGNITION_PATH} --network $(network)
 
 deploy.local: network=localhost
