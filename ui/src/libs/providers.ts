@@ -1,6 +1,6 @@
 import { ethers, providers, BigNumber } from "ethers";
 import { BaseProvider } from "@ethersproject/providers";
-import { CurrentConfig, Environment } from "@/config";
+import { CurrentConfig, Environment, getCurrentNetworkConfig } from "@/config";
 
 // Single copies of provider and wallet
 const mainnetProvider = new ethers.providers.JsonRpcProvider(
@@ -141,7 +141,7 @@ async function sendTransactionViaWallet(
 }
 
 export async function walletSwitchToLineaNetwork() {
-  const chainIDHex = ethers.utils.hexlify(CurrentConfig.lineaNetworkConfig.chainID)
+  const chainIDHex = ethers.utils.hexlify(getCurrentNetworkConfig().chainID)
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
@@ -154,10 +154,10 @@ export async function walletSwitchToLineaNetwork() {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainName: CurrentConfig.lineaNetworkConfig.networkName,
+            chainName: getCurrentNetworkConfig().networkName,
             chainId: chainIDHex,
             nativeCurrency: { name: "ETH", decimals: 18, symbol: "ETH" },
-            rpcUrls: [CurrentConfig.lineaNetworkConfig.rpcURL],
+            rpcUrls: [getCurrentNetworkConfig().rpcURL],
           },
         ],
       });

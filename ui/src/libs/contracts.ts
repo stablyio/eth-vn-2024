@@ -17,21 +17,21 @@ export interface CompoundLendPool {
     totalRecvInterests: number; //User receives interest
 }
 
-export function getLendingBorrowContract(): ethers.Contract {
+export function getLendingBorrowContract(contractAddress: string): ethers.Contract {
     const provider = getProvider()
     if (!provider) {
         throw new Error('No provider')
     }
 
     return new ethers.Contract(
-        CurrentConfig.lendingBorrowContract.address,
+        contractAddress,
         // CurrentConfig.lendingBorrowContract.abi,
         '',
         provider
     )
 }
 
-export function getLendUserInfo(walletAddress: string): LendUserInfo {
-  const lendingBorrowContract = getLendingBorrowContract()
-    throw new Error('Not implemented')
-}
+// export function getLendUserInfo(walletAddress: string): LendUserInfo {
+//   const lendingBorrowContract = getLendingBorrowContract()
+//     throw new Error('Not implemented')
+// }

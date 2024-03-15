@@ -1,7 +1,6 @@
 export enum Environment {
   LOCAL,
   WALLET_EXTENSION,
-  PRODUCTION,
 }
 
 export interface NetworkConfig {
@@ -30,7 +29,7 @@ export interface AppConfig {
   lendingBorrowContract: {
     address: string;
   };
-  lineaNetworkConfig: NetworkConfig;
+  lineaNetworkConfig: Record<Environment, NetworkConfig>;
   uniswapV3LP: UniswapV3LP[];
 }
 
@@ -49,9 +48,16 @@ export const CurrentConfig: AppConfig = {
     address: "",
   },
   lineaNetworkConfig: {
-    networkName: "Linea Testnet",
-    chainID: 59140,
-    rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
+    [Environment.LOCAL]: {
+      networkName: "Linea Testnet",
+      chainID: 59140,
+      rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
+    },
+    [Environment.WALLET_EXTENSION]: {
+      networkName: "Linea Testnet",
+      chainID: 59140,
+      rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
+    },
   },
   uniswapV3LP: [
     {
@@ -64,5 +70,5 @@ export const CurrentConfig: AppConfig = {
 };
 
 export function getCurrentNetworkConfig(): NetworkConfig {
-  return CurrentConfig.lineaNetworkConfig;
+  return CurrentConfig.lineaNetworkConfig[CurrentConfig.env];
 }
