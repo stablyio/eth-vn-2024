@@ -9,6 +9,14 @@ export interface NetworkConfig {
   chainID: number;
   rpcURL: string;
 }
+
+export interface UniswapV3LP {
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+}
+
 export interface AppConfig {
   env: Environment;
   rpc: {
@@ -23,6 +31,7 @@ export interface AppConfig {
     address: string;
   };
   lineaNetworkConfig: NetworkConfig;
+  uniswapV3LP: UniswapV3LP[];
 }
 
 export const CurrentConfig: AppConfig = {
@@ -44,8 +53,16 @@ export const CurrentConfig: AppConfig = {
     chainID: 59140,
     rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
   },
+  uniswapV3LP: [
+    {
+      address: "0x63AF6F0DD26C8ECe6b057c6224762dC7da0B6B04",
+      name: "SyncSwap USDT/USDC Classic LP",
+      symbol: "USDT/USDC cSLP",
+      decimals: 18,
+    },
+  ],
 };
 
 export function getCurrentNetworkConfig(): NetworkConfig {
-    return CurrentConfig.lineaNetworkConfig;
+  return CurrentConfig.lineaNetworkConfig;
 }

@@ -4,6 +4,8 @@ import styles from "./supplymarket.module.css";
 import { AssetBanner } from "../Asset";
 import { SupplyForm } from "../SupplyModal/SupplyForm";
 import { SupplyModal } from "../SupplyModal/SupplyModal";
+import { UniswapV3LPList } from "./UniswapV3LPList";
+import { CurrentConfig } from "@/config";
 
 const Item = styled(Box)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -41,19 +43,7 @@ export function SupplyMarket() {
         </Grid>
       </div>
       <div>
-        <Grid container alignItems="center" justifyContent="center">
-          <Grid item xs={3}>
-            <AssetBanner assetTicket="USDC" />
-          </Grid>
-          <Grid item xs={6}>
-            -
-          </Grid>
-          <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleOpen}>
-              Supply
-            </Button>
-          </Grid>
-        </Grid>
+        <UniswapV3LPList uniswapV3LPList={CurrentConfig.uniswapV3LP} lpOnClick={() => {}} /> 
         <SupplyModal isOpen={open} handleClose={handleClose} />
       </div>
     </div>
