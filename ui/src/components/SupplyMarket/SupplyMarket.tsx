@@ -4,7 +4,7 @@ import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { UniswapV3LPList } from "./UniswapV3LPList";
 import { AssetProp, UniswapV3LP, getUniswapV3LPList } from "@/config";
 import { useAppDispatch } from "@/store";
-import { userLend, userRedeem } from "@/redux/borrowlending";
+import { getLendingPoolOfCurrentWallet, userLend, userRedeem } from "@/redux/borrowlending";
 import {
   Panel,
   PanelHeader,
@@ -39,7 +39,10 @@ export function SupplyMarket() {
     if (amount > 0) {
       dispatch(
         userLend({ lendingPoolId: selectedUniswapV3LP.lendingPoolId, amount })
-      );
+      ).then(() => {
+        dispatch(getLendingPoolOfCurrentWallet());
+        handleClose();
+      });
     }
   };
 

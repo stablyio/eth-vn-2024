@@ -8,7 +8,7 @@ export interface WalletState {
   // Current connected wallet address
   address?: string;
   // Contract address => Balance Number
-  balances: Record<string, number>;
+  balances: Record<string, BigNumber>;
   readableBalances: Record<string, string>;
 }
 
@@ -59,7 +59,7 @@ export const walletSlice = createSlice({
 export const fetchERC20Balance = createAsyncThunk<
   {
     contractAddress: string;
-    balanceOfAddress: number;
+    balanceOfAddress: BigNumber;
     readableBalance: string;
   },
   { contractAddress: string },
@@ -87,13 +87,13 @@ export const fetchERC20Balance = createAsyncThunk<
 
     const balanceOfAddress: BigNumber =
       await erc20Contract.balanceOf(walletAddress);
+      
 
-    const balanceOfAddressNumber = balanceOfAddress.toNumber();
-    const readableBalance = toReadableAmount(balanceOfAddressNumber, decimals);
+    const readableBalance = toReadableAmount(balanceOfAddress, decimals);
 
     return {
       contractAddress,
-      balanceOfAddress: balanceOfAddressNumber,
+      balanceOfAddress,
       readableBalance,
     };
   }

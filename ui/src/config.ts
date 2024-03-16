@@ -56,7 +56,7 @@ export interface AppConfig {
 }
 
 export const CurrentConfig: AppConfig = {
-  env: Environment.BETA,
+  env: Environment.LOCAL,
   wallet: {
     address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
     privateKey:
@@ -66,8 +66,8 @@ export const CurrentConfig: AppConfig = {
   perEnv: {
     [Environment.LOCAL]: {
       lendingBorrowContract: {
-        lendingContractAddress: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-        borrowContractAddress: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        lendingContractAddress: "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+        borrowContractAddress: "0x4A679253410272dd5232B3Ff7cF5dbB88f295319",
       },
       lineaNetworkConfig: {
         networkName: "Linea Local",
@@ -83,8 +83,24 @@ export const CurrentConfig: AppConfig = {
           logoName: "eth",
           lendingPoolId: 1,
         },
+        {
+          address: "0x998abeb3E57409262aE5b751f60747921B33613E",
+          name: "MyToken",
+          symbol: "MyToken",
+          decimals: 0,
+          logoName: "eth",
+          lendingPoolId: 1,
+        },
       ],
       erc20LiquidityAssets: [
+        {
+          address: "0x998abeb3E57409262aE5b751f60747921B33613E",
+          name: "MyToken",
+          symbol: "MyToken",
+          decimals: 0,
+          logoName: "eth",
+          lendingPoolId: 1,
+        },
         {
           address: "0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068",
           name: "USDC",

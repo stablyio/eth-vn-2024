@@ -1,19 +1,18 @@
-import { ethers } from "ethers";
-import { getProvider } from "./providers";
+import { BigNumber, ethers } from "ethers";
 
 export interface LendUserInfo {
-    lastLendInterestShare: number;
-    unRecvInterests: number;
-    currTotalLend: number;
-    userDli: number;
+    lastLendInterestShare: BigNumber;
+    unRecvInterests: BigNumber;
+    currTotalLend: BigNumber;
+    userDli: BigNumber;
 }
 
 export interface CompoundLendPool {
     token: string;
     spToken: string;
-    curSupply: number;
-    curBorrow: number;
-    totalRecvInterests: number; //User receives interest
+    curSupply: BigNumber;
+    curBorrow: BigNumber;
+    totalRecvInterests: BigNumber; //User receives interest
 }
 
 // export function getLendingBorrowContract(contractAddress: string): ethers.Contract {

@@ -74,6 +74,7 @@ async function sendTransactionViaExtension(
       "eth_sendTransaction",
       [transaction]
     );
+    console.log('receipt', receipt)
     if (receipt) {
       return TransactionState.Sent;
     } else {

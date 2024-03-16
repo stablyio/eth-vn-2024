@@ -1,16 +1,20 @@
 import { getQuadraticLendingCompound } from "@/abi/borrowLendingCompound";
-import { getProvider, sendTransaction } from "@/libs/providers";
+import {
+  TransactionState,
+  getProvider,
+  sendTransaction,
+} from "@/libs/providers";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BigNumber } from "ethers";
 import { WalletState } from "./wallet";
-import { CompoundLendPool } from "@/libs/contracts";
+import { CompoundLendPool, LendUserInfo } from "@/libs/contracts";
 
 export interface BorrowLendingState {
   lendingContractAddress: string;
   borrowContractAddress: string;
   loading: boolean;
   errorMessage: string;
-  lendPools: CompoundLendPool[];
+  lendUserInfo: Record<number, LendUserInfo>;
 }
 
 const initialState: BorrowLendingState = {
@@ -18,7 +22,7 @@ const initialState: BorrowLendingState = {
   borrowContractAddress: "",
   loading: false,
   errorMessage: "",
-  lendPools: [],
+  lendUserInfo: {},
 };
 
 function getLendingContract(
@@ -102,10 +106,13 @@ export const borrowLending = createSlice({
     });
     builder.addCase(
       getLendingPoolOfCurrentWallet.fulfilled,
-      (state, action: PayloadAction<{ lendPools: CompoundLendPool[] }>) => {
+      (
+        state,
+        action: PayloadAction<{ lendPools: Record<number, LendUserInfo> }>
+      ) => {
         state.loading = false;
         state.errorMessage = "";
-        state.lendPools = action.payload.lendPools;
+        state.lendUserInfo = action.payload.lendPools;
       }
     );
     builder.addCase(getLendingPoolOfCurrentWallet.rejected, (state, action) => {
@@ -122,6 +129,7 @@ export const borrowLending = createSlice({
       state.lendingContractAddress,
     getLoading: (state: BorrowLendingState) => state.loading,
     getErrorMessage: (state: BorrowLendingState) => state.errorMessage,
+    getLendUserInfo: (state: BorrowLendingState) => state.lendUserInfo,
   },
 });
 
@@ -146,10 +154,14 @@ export const userLend = createAsyncThunk<
       lendingPoolId,
       BigNumber.from(amount)
     );
-    await sendTransaction({
+    const transactionData = await sendTransaction({
       ...transaction,
       from: walletAddress,
     });
+    console.log("transactionData", transactionData);
+    if (transactionData != TransactionState.Sent) {
+      return rejectWithValue({ error: "Transaction failed" });
+    }
 
     return {};
   }
@@ -186,13 +198,13 @@ export const userRedeem = createAsyncThunk<
 );
 
 export const getLendingPoolOfCurrentWallet = createAsyncThunk<
-  { lendPools: CompoundLendPool[] },
+  { lendPools: Record<number, LendUserInfo> },
   undefined,
   {
     state: { borrowLending: BorrowLendingState; wallet: WalletState };
     rejectValue: { error: string };
   }
->("lending/getLendingPool", async (_, { getState, rejectWithValue }) => {
+>("lending/getLendUserInfos", async (_, { getState, rejectWithValue }) => {
   const lendingContract = await getLendingContract(getState, rejectWithValue);
   if (!lendingContract) {
     return rejectWithValue({ error: "No lending contract" });
@@ -203,17 +215,22 @@ export const getLendingPoolOfCurrentWallet = createAsyncThunk<
     return rejectWithValue({ error: "No wallet address" });
   }
 
-  const poolId = 2;
-  const lendPool: CompoundLendPool = await lendingContract.lendUserInfos(
+  const poolId = 1;
+  const lendPool: LendUserInfo = await lendingContract.lendUserInfos(
     walletAddress,
     poolId
   );
+  // console.log("get lend user info", walletAddress, poolId, lendPool)
 
-  if (!lendPool.token) {
+  if (!lendPool.currTotalLend) {
     return rejectWithValue({ error: "No pool token" });
   }
 
-  return { lendPools: [lendPool] };
+  return {
+    lendPools: {
+      [poolId]: lendPool,
+    },
+  };
 });
 
 export const userBorrow = createAsyncThunk<
