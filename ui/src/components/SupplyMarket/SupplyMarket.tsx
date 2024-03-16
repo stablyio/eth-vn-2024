@@ -4,7 +4,7 @@ import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { UniswapV3LPList } from "./UniswapV3LPList";
 import { AssetProp, UniswapV3LP, getUniswapV3LPList } from "@/config";
 import { useAppDispatch } from "@/store";
-import { userLend } from "@/redux/borrowlending";
+import { userLend, userRedeem } from "@/redux/borrowlending";
 import {
   Panel,
   PanelHeader,
@@ -37,7 +37,17 @@ export function SupplyMarket() {
   // Call Contract to lend the LP token
   const handleSupplyClicked = (asset: AssetProp, amount: number) => {
     if (amount > 0) {
-      dispatch(userLend({ lpTokenAddress: asset.address, amount }));
+      dispatch(
+        userLend({ lendingPoolId: selectedUniswapV3LP.lendingPoolId, amount })
+      );
+    }
+  };
+
+  const handleRedeemClicked = (asset: AssetProp, amount: number) => {
+    if (amount > 0) {
+      dispatch(
+        userRedeem({ lendingPoolId: selectedUniswapV3LP.lendingPoolId, amount })
+      );
     }
   };
 
@@ -70,6 +80,7 @@ export function SupplyMarket() {
           handleClose={handleClose}
           uniswapV3LP={selectedUniswapV3LP}
           handleSupply={handleSupplyClicked}
+          handleRedeem={handleRedeemClicked}
         />
       </Panel>
     </ThemeProvider>

@@ -22,6 +22,7 @@ export interface UniswapV3LP {
   symbol: string;
   decimals: number;
   logoName: string;
+  lendingPoolId: number;
 }
 
 export interface ERC20LiquidityAsset {
@@ -80,6 +81,7 @@ export const CurrentConfig: AppConfig = {
           symbol: "ETH/USDC",
           decimals: 0,
           logoName: "eth",
+          lendingPoolId: 1,
         },
       ],
       erc20LiquidityAssets: [
@@ -134,6 +136,7 @@ export const CurrentConfig: AppConfig = {
           symbol: "ETH/USDC POS",
           decimals: 0,
           logoName: "eth",
+          lendingPoolId: 1,
         },
       ],
       erc20LiquidityAssets: [

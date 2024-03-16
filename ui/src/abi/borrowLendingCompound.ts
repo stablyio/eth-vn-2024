@@ -12,6 +12,7 @@ export const QuadraticLendingCompound_ABI = [
   // Read-Only Functions
   "function userLend(uint256 _pid, uint256 _amount) public",
   `function lendUserInfos(address, uint256) public view returns (${LendUserInfo})`,
+  "function userRedeem(uint256 pid, uint256 _amount) external returns (uint256)"
 ];
 
 export function getQuadraticBorrowCompound(

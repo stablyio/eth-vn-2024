@@ -7,6 +7,7 @@ import { useState } from "react";
 import { CustomTabPanel } from "../Tab/TabGroup";
 import { UniswapV3LP } from "@/config";
 import { AssetBanner } from "../Asset";
+import { RedeemForm } from "./RedeemForm";
 
 const style = {
   position: "absolute" as "absolute",
@@ -26,6 +27,7 @@ export interface SupplyModalProps {
   handleClose: () => void;
   uniswapV3LP: UniswapV3LP;
   handleSupply: (uniswapV3LP: UniswapV3LP, amount: number) => void;
+  handleRedeem: (uniswapV3LP: UniswapV3LP, amount: number) => void;
 }
 
 export function SupplyModal({
@@ -33,6 +35,7 @@ export function SupplyModal({
   handleClose,
   uniswapV3LP,
   handleSupply,
+  handleRedeem,
 }: SupplyModalProps) {
   const [tabValue, setTabValue] = useState(0);
 
@@ -52,10 +55,14 @@ export function SupplyModal({
     handleSupply && handleSupply(uniswapV3LP, amount);
   };
 
+  const onRedeem = (amount: number) => {
+    handleRedeem && handleRedeem(uniswapV3LP, amount);
+  };
+
   const changeTabValue = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-  console.log('balanceOfAddress', balanceOfAddress)
+  console.log("balanceOfAddress", balanceOfAddress);
 
   return (
     <Modal
@@ -91,7 +98,13 @@ export function SupplyModal({
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={1}>
-          Withdraw
+          <RedeemForm
+            availableAmount={balanceOfAddress}
+            onRedeem={onRedeem}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+            asset={uniswapV3LP}
+          />
         </CustomTabPanel>
       </Box>
     </Modal>

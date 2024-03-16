@@ -2,22 +2,23 @@ import React from "react";
 import { Alert, Stack } from "@mui/material";
 import { AssetInput } from "../AssetInput/AssetInput";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { supplyButtonStyle } from "../SupplyMarket/styles";
 import { AssetProp } from "@/config";
 
-export interface SupplyFormProps {
+export interface RedeemFormProps {
   isLoading: boolean;
   errorMessage: string;
   availableAmount: string;
-  onSupply: (amount: number) => void;
+  onRedeem: (amount: number) => void;
   asset: AssetProp;
 }
-export function SupplyForm({
+export function RedeemForm({
   isLoading,
   errorMessage,
   availableAmount,
   asset,
-  onSupply,
-}: SupplyFormProps) {
+  onRedeem,
+}: RedeemFormProps) {
   const [value, setValue] = React.useState<number | null>(null);
 
   return (
@@ -29,7 +30,7 @@ export function SupplyForm({
         alignItems="center"
         sx={{ marginTop: "1rem" }}
       >
-        <span>Wallet Balance</span>
+        <span>Withdrawable amount</span>
         <span>{availableAmount ?? "0"}</span>
       </Stack>
       {errorMessage && (
@@ -42,13 +43,13 @@ export function SupplyForm({
         loading={isLoading}
         // sx={supplyButtonStyle}
         onClick={() => {
-          onSupply && onSupply(value);
+          onRedeem && onRedeem(value);
         }}
         style={{
           marginTop: "1rem",
         }}
       >
-        SUPPLY
+        WITHDRAW
       </LoadingButton>
     </Stack>
   );

@@ -127,18 +127,14 @@ export const borrowLending = createSlice({
 
 export const userLend = createAsyncThunk<
   {},
-  { lpTokenAddress: string; amount: number },
+  { lendingPoolId: number; amount: number },
   {
     state: { borrowLending: BorrowLendingState; wallet: WalletState };
     rejectValue: { error: string };
   }
 >(
   "lending/userLend",
-  async ({ lpTokenAddress, amount }, { getState, rejectWithValue }) => {
-    if (!lpTokenAddress) {
-      return rejectWithValue({ error: "No lpTokenAddress provided" });
-    }
-
+  async ({ lendingPoolId, amount }, { getState, rejectWithValue }) => {
     const walletAddress = getState().wallet.address;
 
     const lendingContract = await getLendingContract(getState, rejectWithValue);
@@ -146,10 +142,38 @@ export const userLend = createAsyncThunk<
       return rejectWithValue({ error: "No lending contract" });
     }
 
-    //TODO: Get pool ID from lpTokenAddress
-    const poolIdFromToken = 2;
     const transaction = await lendingContract.populateTransaction.userLend(
-      poolIdFromToken,
+      lendingPoolId,
+      BigNumber.from(amount)
+    );
+    await sendTransaction({
+      ...transaction,
+      from: walletAddress,
+    });
+
+    return {};
+  }
+);
+
+export const userRedeem = createAsyncThunk<
+  {},
+  { lendingPoolId: number; amount: number },
+  {
+    state: { borrowLending: BorrowLendingState; wallet: WalletState };
+    rejectValue: { error: string };
+  }
+>(
+  "lending/userRedeem",
+  async ({ lendingPoolId, amount }, { getState, rejectWithValue }) => {
+    const walletAddress = getState().wallet.address;
+
+    const lendingContract = await getLendingContract(getState, rejectWithValue);
+    if (!lendingContract) {
+      return rejectWithValue({ error: "No lending contract" });
+    }
+
+    const transaction = await lendingContract.populateTransaction.userRedeem(
+      lendingPoolId,
       BigNumber.from(amount)
     );
     await sendTransaction({
