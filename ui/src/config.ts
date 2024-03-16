@@ -1,6 +1,6 @@
 export enum Environment {
   LOCAL,
-  WALLET_EXTENSION,
+  BETA,
 }
 
 export interface NetworkConfig {
@@ -16,48 +16,30 @@ export interface UniswapV3LP {
   decimals: number;
 }
 
+export interface PerEnvConfig {
+  lendingBorrowContract: {
+    lendingContractAddress: string;
+    borrowContractAddress: string;
+  };
+  lineaNetworkConfig: NetworkConfig;
+}
+
 export interface AppConfig {
   env: Environment;
-  rpc: {
-    local: string;
-    mainnet: string;
-  };
   wallet: {
     address: string;
     privateKey: string;
   };
-  lendingBorrowContract: {
-    address: string;
-  };
-  lineaNetworkConfig: Record<Environment, NetworkConfig>;
   uniswapV3LP: UniswapV3LP[];
+  perEnv: Record<Environment, PerEnvConfig>;
 }
 
 export const CurrentConfig: AppConfig = {
-  env: Environment.WALLET_EXTENSION,
-  rpc: {
-    local: "http://localhost:8545",
-    mainnet: "",
-  },
+  env: Environment.LOCAL,
   wallet: {
     address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
     privateKey:
       "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
-  },
-  lendingBorrowContract: {
-    address: "",
-  },
-  lineaNetworkConfig: {
-    [Environment.LOCAL]: {
-      networkName: "Linea Testnet",
-      chainID: 59140,
-      rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
-    },
-    [Environment.WALLET_EXTENSION]: {
-      networkName: "Linea Testnet",
-      chainID: 59140,
-      rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
-    },
   },
   uniswapV3LP: [
     {
@@ -67,8 +49,33 @@ export const CurrentConfig: AppConfig = {
       decimals: 18,
     },
   ],
+  perEnv: {
+    [Environment.LOCAL]: {
+      lendingBorrowContract: {
+        lendingContractAddress: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        borrowContractAddress: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      },
+
+      lineaNetworkConfig: {
+        networkName: "Linea Local",
+        chainID: 31337,
+        rpcURL: "http://127.0.0.1:8545",
+      },
+    },
+    [Environment.BETA]: {
+      lendingBorrowContract: {
+        lendingContractAddress: "",
+        borrowContractAddress: "",
+      },
+      lineaNetworkConfig: {
+        networkName: "Linea Testnet",
+        chainID: 59140,
+        rpcURL: "https://linea-goerli.blockpi.network/v1/rpc/public",
+      },
+    },
+  },
 };
 
 export function getCurrentNetworkConfig(): NetworkConfig {
-  return CurrentConfig.lineaNetworkConfig[CurrentConfig.env];
+  return CurrentConfig.perEnv[CurrentConfig.env].lineaNetworkConfig;
 }
