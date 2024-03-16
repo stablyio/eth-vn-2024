@@ -33,6 +33,7 @@ module.exports = {
         test: /\.svg$/,
         use: ["@svgr/webpack", "url-loader"],
       },
+      { test: /\.json$/, use: ['file-loader'] },
     ],
   },
   resolve: {
@@ -44,7 +45,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html"),
-    })
+    }),
   ],
   devServer: {
     static: {
