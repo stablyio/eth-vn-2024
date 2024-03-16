@@ -1,21 +1,28 @@
 import { ethers } from "hardhat";
 import { LendingCompound, MyTokenAddress } from "./constants";
 
-// npx hardhat run --network localhost scripts/deployAllContract.ts
+// npx hardhat run --network localhost scripts/userLend.ts
 async function main() {
   const [signer] = await ethers.getSigners();
 
   const QuadraticLendCompound = await ethers.getContractAt(
     "QuadraticLendCompound",
-    LendingCompound
+    LendingCompound,
+    signer
   );
 
   const myToken =  await ethers.getContractAt("MyToken", MyTokenAddress);
 
-  await QuadraticLendCompound.userLend(myToken.target, 1);
+  const myTokenApproval = await myToken.approve(
+    QuadraticLendCompound.target,
+    ethers.MaxUint256
+  );
+  await myTokenApproval.wait();
+
+  await QuadraticLendCompound.userLend(1, 10000);
   const lendUserInfo = await QuadraticLendCompound.lendUserInfos(
     signer.address,
-    0
+    1
   );
   console.log("lendUserInfo:", lendUserInfo);
 
