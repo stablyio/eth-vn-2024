@@ -1,6 +1,7 @@
 import { ethers, providers } from "ethers";
 import { getCurrentNetworkConfig } from "@/config";
 
+
 const browserExtensionProvider = createBrowserExtensionProvider();
 let walletExtensionAddress: string | null = null;
 
@@ -30,14 +31,14 @@ export async function sendTransaction(
 
 export async function connectBrowserExtensionWallet() {
   if (!window.ethereum) {
-    return null;
+    return undefined;
   }
 
   const { ethereum } = window;
   const provider = new ethers.providers.Web3Provider(ethereum as any);
   const accounts = await provider.send("eth_requestAccounts", []);
 
-  if (accounts.length !== 1) {
+  if (accounts.length == 0) {
     return;
   }
 
@@ -121,14 +122,12 @@ async function sendTransactionViaExtension(
 
 export async function walletSwitchToLineaNetwork() {
   const chainIDHex = ethers.utils.hexlify(getCurrentNetworkConfig().chainID);
-  console.log(chainIDHex);
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainIDHex }],
     });
   } catch (err) {
-    console.log('err', err)
     // This error code indicates that the chain has not been added to MetaMask
     if (err.code === 4902) {
       await window.ethereum.request({
@@ -144,4 +143,13 @@ export async function walletSwitchToLineaNetwork() {
       });
     }
   }
+}
+
+export async function walletGetChainID(): Promise<number> {
+  const chainID = await window.ethereum.request({
+    "method": "eth_chainId",
+    "params": []
+  });
+
+  return Number(chainID);
 }

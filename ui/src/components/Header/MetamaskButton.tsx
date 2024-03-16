@@ -12,13 +12,13 @@ import { walletSlice } from "@/redux/wallet";
 
 export function MetamaskButton() {
   const currentNetworkConfig = getCurrentNetworkConfig();
-  const { account, chainId } = useSDK();
+  const { account, chainId, provider } = useSDK();
   const chainIDNumber = Number(chainId);
   const shouldChangeNetwork = chainIDNumber !== currentNetworkConfig.chainID;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    connectBrowserExtensionWallet();
+    // connectBrowserExtensionWallet();
   }, []);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function MetamaskButton() {
 
   if (shouldChangeNetwork) {
     return (
-      <Button onClick={walletSwitchToLineaNetwork}>
+      <Button onClick={() => walletSwitchToLineaNetwork()}>
         Switch to Linea Network
       </Button>
     );

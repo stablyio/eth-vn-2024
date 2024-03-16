@@ -24,7 +24,7 @@ export function App() {
     <main>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <MetaMaskProvider
+        {/* <MetaMaskProvider
           debug={false}
           sdkOptions={{
             dappMetadata: {
@@ -32,32 +32,33 @@ export function App() {
               url: window.location.href,
             },
           }}
-        >
-          <MetaMaskUIProvider
+        > */}
+        {/* <MetaMaskUIProvider
+            debug={true}
             sdkOptions={{
               dappMetadata: {
                 name: "Lending Borrowing Dapp",
                 url: window.location.href,
               },
             }}
-          >
-            <Provider store={store}>
-              <RootLayout>
-                <div style={{ marginBottom: "-4rem" }}>
-                  <WalletPanel />
-                </div>
-                <div
-                  style={{
-                    marginLeft: "30px",
-                    marginRight: "30px",
-                  }}
-                >
-                  <SupplyBorrowPanel />
-                </div>
-              </RootLayout>
-            </Provider>
-          </MetaMaskUIProvider>
-        </MetaMaskProvider>
+          > */}
+        <Provider store={store}>
+          <RootLayout>
+            <div style={{ marginBottom: "-4rem" }}>
+              <WalletPanel />
+            </div>
+            <div
+              style={{
+                marginLeft: "30px",
+                marginRight: "30px",
+              }}
+            >
+              <SupplyBorrowPanel />
+            </div>
+          </RootLayout>
+        </Provider>
+        {/* </MetaMaskUIProvider> */}
+        {/* </MetaMaskProvider> */}
       </ThemeProvider>
     </main>
   );

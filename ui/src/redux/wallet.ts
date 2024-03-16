@@ -78,7 +78,13 @@ export const fetchERC20Balance = createAsyncThunk<
     }
 
     const erc20Contract = getErc20Contract(contractAddress, provider);
-    const decimals: number = await erc20Contract.decimals();
+    let decimals: number = 0;
+    try {
+      decimals = await erc20Contract.decimals();
+    } catch (e) {
+      // ERC721 has not decimal
+    }
+
     const balanceOfAddress: BigNumber =
       await erc20Contract.balanceOf(walletAddress);
 

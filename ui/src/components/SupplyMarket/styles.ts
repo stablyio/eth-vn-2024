@@ -8,5 +8,4 @@ export const supplyButtonStyle = createStyles({
     backgroundColor: "#007F73",
     color: "#FFFFFF",
   },
-  width: "85px",
 });

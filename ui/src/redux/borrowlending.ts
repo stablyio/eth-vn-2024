@@ -94,7 +94,7 @@ export const borrowLending = createSlice({
     });
   },
   selectors: {
-    getContractAddress: (state: BorrowLendingState) =>
+    getLendingContractAddress: (state: BorrowLendingState) =>
       state.lendingContractAddress,
     getLoading: (state: BorrowLendingState) => state.loading,
     getErrorMessage: (state: BorrowLendingState) => state.errorMessage,
@@ -123,7 +123,7 @@ export const userLend = createAsyncThunk<
     }
 
     //TODO: Get pool ID from lpTokenAddress
-    const poolIdFromToken = 0;
+    const poolIdFromToken = 2;
     const transaction = await lendingContract.populateTransaction.userLend(
       poolIdFromToken,
       BigNumber.from(amount)

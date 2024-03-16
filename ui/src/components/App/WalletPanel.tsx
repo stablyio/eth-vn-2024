@@ -1,7 +1,13 @@
 import { getCurrentNetworkConfig } from "@/config";
 import { walletSwitchToLineaNetwork } from "@/libs/providers";
-import { useSDK } from "@metamask/sdk-react";
+import {
+  ethereumProviderInit,
+  ethereumProviderSlice,
+} from "@/redux/ethereumProvider";
+import { walletSlice } from "@/redux/wallet";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { Button, Grid, styled } from "@mui/material";
+import { useEffect } from "react";
 
 const BalanceWrapper = styled("div")({});
 
@@ -28,10 +34,30 @@ const CenterWrapper = styled("div")({
 
 export function WalletPanel() {
   const currentNetworkConfig = getCurrentNetworkConfig();
-  // const { chainId, account } = useSDK();
-  const {chainId, account} = {} as any;
-  const chainIDNumber = Number(chainId);
-  const shouldChangeNetwork = chainIDNumber !== currentNetworkConfig.chainID;
+  const chainID = useAppSelector((state) =>
+    ethereumProviderSlice.selectors.getChainID(state)
+  );
+  const account = useAppSelector((state) =>
+    ethereumProviderSlice.selectors.getAccount(state)
+  );
+  const shouldChangeNetwork = chainID !== currentNetworkConfig.chainID;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(ethereumProviderInit());
+
+    window.ethereum.on("chainChanged", (chainId: string) => {
+      dispatch(ethereumProviderInit());
+    });
+
+    window.ethereum.on("accountsChanged", (chainId: string) => {
+      dispatch(ethereumProviderInit());
+    });
+  }, []);
+
+  useEffect(() => {
+    dispatch(walletSlice.actions.updateWalletAddress(account));
+  }, [account]);
 
   return (
     <WalletPanelWrapper sx={{ color: "white" }}>
@@ -46,14 +72,14 @@ export function WalletPanel() {
         <Grid item xs={6} alignContent="center" justifyContent="center">
           <CenterWrapper>
             {shouldChangeNetwork ? (
-              <Button onClick={walletSwitchToLineaNetwork}>
+              <Button onClick={() => walletSwitchToLineaNetwork()}>
                 Switch to Linea Network
               </Button>
             ) : (
               <div>
                 <div>Chan ID</div>
                 <div>
-                  <b>{chainId ? Number(chainId) : "N/A"}</b>
+                  <b>{chainID ?? "N/A"}</b>
                 </div>
                 <div>Account</div>
                 <div>{account ?? "N/A"}</div>

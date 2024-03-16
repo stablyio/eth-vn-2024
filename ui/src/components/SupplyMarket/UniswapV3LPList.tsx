@@ -7,6 +7,7 @@ import { fetchERC20Balance, walletSlice } from "@/redux/wallet";
 import { AssetNumber } from "../Asset/AssetNumber";
 import { PanelRow } from "../Panel/Panel";
 import { supplyButtonStyle } from "./styles";
+import { borrowLending } from "@/redux/borrowlending";
 
 export interface UniswapV3LPListProps {
   uniswapV3LPList: UniswapV3LP[];
@@ -24,19 +25,24 @@ export function useUniswapV3LPList(uniswapV3LPList: UniswapV3LP[]) {
   const walletAddress = useAppSelector((state) =>
     walletSlice.selectors.getAddress(state)
   );
+  const lendingContractAddress = useAppSelector((state) =>
+    borrowLending.selectors.getLendingContractAddress(state)
+  );
 
   useEffect(() => {
-    uniswapV3LPList.forEach((uniswapV3LP) => {
-      const balanceOfContract = allReadableBalances[uniswapV3LP.address];
-      if (balanceOfContract == undefined) {
-        dispatch(
-          fetchERC20Balance({
-            contractAddress: uniswapV3LP.address,
-          })
-        );
-      }
-    });
-  }, [allReadableBalances, walletAddress]);
+    if (lendingContractAddress && walletAddress) {
+      uniswapV3LPList.forEach((uniswapV3LP) => {
+        const balanceOfContract = allReadableBalances[uniswapV3LP.address];
+        if (balanceOfContract == undefined) {
+          dispatch(
+            fetchERC20Balance({
+              contractAddress: uniswapV3LP.address,
+            })
+          );
+        }
+      });
+    }
+  }, [lendingContractAddress, walletAddress]);
 
   return { allBalances, allReadableBalances };
 }
@@ -67,10 +73,12 @@ export function UniswapV3LPList({
             </Grid>
             <Grid item xs={4} textAlign="end">
               <div>
-              <AssetNumber>
-                {allReadableBalances[uniswapV3LP.address] ?? "0"}
-              </AssetNumber>{" "}
-              <Typography noWrap component="span">{uniswapV3LP.symbol}</Typography>
+                <AssetNumber>
+                  {allReadableBalances[uniswapV3LP.address] ?? "0"}
+                </AssetNumber>{" "}
+                <Typography noWrap component="span">
+                  {uniswapV3LP.symbol}
+                </Typography>
               </div>
             </Grid>
             <Grid item xs={2} textAlign="end">
@@ -80,6 +88,7 @@ export function UniswapV3LPList({
                 // disabled={false || !allBalances[uniswapV3LP.address]}
                 onClick={() => supplyOnClick(uniswapV3LP)}
                 sx={supplyButtonStyle}
+                style={{ width: '85px'}}
               >
                 Supply
               </Button>

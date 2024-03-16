@@ -1,5 +1,5 @@
 import { AppBar, Box, Container, Stack, Toolbar } from "@mui/material";
-import { MetamaskButton } from "./MetamaskButton";
+// import { MetamaskButton } from "./MetamaskButton";
 import stablyLogo from "../../../public/icons/stably_logo.png";
 
 interface HeaderProps {
@@ -30,7 +30,7 @@ export const Header = ({ position }: HeaderProps) => {
               sx={{ display: "flex", alignItems: "center", width: "100%" }}
             >
               <img src={stablyLogo} alt="logo" style={{ maxHeight: "32px" }} />
-              <MetamaskButton></MetamaskButton>
+              {/* <MetamaskButton></MetamaskButton> */}
             </Stack>
           </Toolbar>
         </Container>

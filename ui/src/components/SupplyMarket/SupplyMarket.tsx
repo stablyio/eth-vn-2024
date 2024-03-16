@@ -36,7 +36,9 @@ export function SupplyMarket() {
 
   // Call Contract to lend the LP token
   const handleSupplyClicked = (asset: AssetProp, amount: number) => {
-    dispatch(userLend({ lpTokenAddress: asset.address, amount }));
+    if (amount > 0) {
+      dispatch(userLend({ lpTokenAddress: asset.address, amount }));
+    }
   };
 
   return (
