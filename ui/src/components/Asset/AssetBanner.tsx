@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { Icon } from '../SvgIcon';
 
 export interface AssetBannerProps {
-  assetTicket: string;
+  // assetTicket: string;
   name: string;
   logoName: string;
 }

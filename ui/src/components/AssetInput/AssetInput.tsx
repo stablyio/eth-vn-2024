@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Box, styled } from "@mui/material";
 import InputNumber from "react-input-number";
+import { AssetBanner } from "../Asset/AssetBanner";
+import { AssetProp } from "@/config";
 
 const AssetTicker = styled("div")({
   display: "flex",
@@ -9,9 +11,9 @@ const AssetTicker = styled("div")({
 export interface AssetInputProps {
   num: number | null;
   onChange: (num: number | null) => void;
-  symbol: string;
+  asset: AssetProp;
 }
-export function AssetInput({ num, onChange, symbol }: AssetInputProps) {
+export function AssetInput({ num, onChange, asset }: AssetInputProps) {
   return (
     <Box
       sx={{
@@ -36,7 +38,7 @@ export function AssetInput({ num, onChange, symbol }: AssetInputProps) {
           fontSize: "2rem",
         }}
       />
-      <AssetTicker>{symbol}</AssetTicker>
+      <AssetBanner name={asset.symbol} logoName={asset.logoName} />
     </Box>
   );
 }

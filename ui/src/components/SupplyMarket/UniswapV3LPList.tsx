@@ -6,10 +6,11 @@ import { useEffect } from "react";
 import { fetchERC20Balance, walletSlice } from "@/redux/wallet";
 import { AssetNumber } from "../Asset/AssetNumber";
 import { PanelRow } from "../Panel/Panel";
+import { supplyButtonStyle } from "./styles";
 
 export interface UniswapV3LPListProps {
   uniswapV3LPList: UniswapV3LP[];
-  supplyOnClick: (contractAddress: string) => void;
+  supplyOnClick: (uniswapV3LP: UniswapV3LP) => void;
 }
 
 export function useUniswapV3LPList(uniswapV3LPList: UniswapV3LP[]) {
@@ -44,8 +45,7 @@ export function UniswapV3LPList({
   uniswapV3LPList,
   supplyOnClick,
 }: UniswapV3LPListProps) {
-  const { allBalances, allReadableBalances } =
-    useUniswapV3LPList(uniswapV3LPList);
+  const { allReadableBalances } = useUniswapV3LPList(uniswapV3LPList);
 
   return (
     <PanelRow>
@@ -61,7 +61,6 @@ export function UniswapV3LPList({
           >
             <Grid item xs={6}>
               <AssetBanner
-                assetTicket={uniswapV3LP.symbol}
                 name={uniswapV3LP.name}
                 logoName={uniswapV3LP.logoName}
               />
@@ -75,10 +74,10 @@ export function UniswapV3LPList({
             <Grid item xs={2} textAlign="end">
               <Button
                 variant="outlined"
-                color="primary"
                 size="small"
                 // disabled={false || !allBalances[uniswapV3LP.address]}
-                onClick={() => supplyOnClick(uniswapV3LP.address)}
+                onClick={() => supplyOnClick(uniswapV3LP)}
+                sx={supplyButtonStyle}
               >
                 Supply
               </Button>

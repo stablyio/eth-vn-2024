@@ -1,6 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import { AssetBanner } from "../Asset";
-import { ERC20LiquidityAsset } from "@/config";
+import { AssetProp, ERC20LiquidityAsset } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { walletSlice } from "@/redux/wallet";
@@ -10,7 +10,7 @@ import { PanelRow } from "../Panel/Panel";
 
 export interface UniswapV3LPListProps {
   erc20LiquidityAssets: ERC20LiquidityAsset[];
-  borrowOnClick: (contractAddress: string) => void;
+  borrowOnClick: (asset: AssetProp) => void;
 }
 
 export function useLiquidityAssetList() {
@@ -39,23 +39,23 @@ export function LiquidityAssetList({
             key={uniswapV3LP.address}
             columnSpacing={3}
           >
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <AssetBanner
-                assetTicket={uniswapV3LP.symbol}
                 name={uniswapV3LP.name}
                 logoName={uniswapV3LP.logoName}
               />
             </Grid>
-            <Grid item xs={6} textAlign="end">
+            <Grid item xs={4} textAlign="end">
               <AssetNumber>{"0"}</AssetNumber> {uniswapV3LP.symbol}
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2} textAlign="end">
               <Button
                 variant="outlined"
                 color="primary"
                 size="small"
                 // disabled={false || !allBalances[uniswapV3LP.address]}
-                onClick={() => borrowOnClick(uniswapV3LP.address)}
+                onClick={() => borrowOnClick(uniswapV3LP)}
+                sx={{ width: "85px" }}
               >
                 Borrow
               </Button>

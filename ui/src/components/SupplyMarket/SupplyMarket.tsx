@@ -1,56 +1,75 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, ThemeProvider, createTheme } from "@mui/material";
 import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { UniswapV3LPList } from "./UniswapV3LPList";
-import { getUniswapV3LPList } from "@/config";
+import { AssetProp, UniswapV3LP, getUniswapV3LPList } from "@/config";
 import { useAppDispatch } from "@/store";
 import { userLend } from "@/redux/borrowlending";
-import { Panel, PanelHeader, PanelLabel, PanelLabelText } from "../Panel/Panel";
+import {
+  Panel,
+  PanelHeader,
+  PanelHeaderDesc,
+  PanelLabel,
+  PanelLabelText,
+} from "../Panel/Panel";
+
+const supplyTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#00D395",
+    },
+  },
+});
 
 export function SupplyMarket() {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
-  const [selectedContractAddress, setSelectedContractAddress] =
-    React.useState("");
+  const [selectedUniswapV3LP, setSelectedUniswapV3LP] = React.useState<
+    UniswapV3LP | undefined
+  >();
   const dispatch = useAppDispatch();
 
-  const supplyOnClick = (contractAddress: string) => {
-    setSelectedContractAddress(contractAddress);
+  const supplyOnClick = (uniswapV3LP: UniswapV3LP) => {
+    setSelectedUniswapV3LP(uniswapV3LP);
     setOpen(true);
   };
 
   // Call Contract to lend the LP token
-  const handleSupplyClicked = (lpTokenAddress: string, amount: number) => {
-    dispatch(userLend({ lpTokenAddress, amount }));
+  const handleSupplyClicked = (asset: AssetProp, amount: number) => {
+    dispatch(userLend({ lpTokenAddress: asset.address, amount }));
   };
 
   return (
-    <Panel>
-      <PanelHeader>
-        <h4 style={{ margin: "0px" }}>Supply Markets</h4>
-      </PanelHeader>
-      <h4>Collteral your LSDs position(s) to borrowing assets.</h4>
-      <PanelLabel>
-        <Grid container alignItems="center" justifyContent="center">
-          <Grid item xs={6} padding={0}>
-            <PanelLabelText>Asset</PanelLabelText>
+    <ThemeProvider theme={supplyTheme}>
+      <Panel>
+        <PanelHeader sx={{ borderBottomColor: "#00D395" }}>
+          <h4 style={{ margin: "0px" }}>Supply Markets</h4>
+          <PanelHeaderDesc>
+            Collteral your Uniswap V3 LP Position to borrowing assets.
+          </PanelHeaderDesc>
+        </PanelHeader>
+        <PanelLabel>
+          <Grid container alignItems="center" justifyContent="center">
+            <Grid item xs={6} padding={0}>
+              <PanelLabelText>Asset</PanelLabelText>
+            </Grid>
+            <Grid item xs={4} textAlign="end">
+              <PanelLabelText>Wallet balance</PanelLabelText>
+            </Grid>
+            <Grid item xs={2}></Grid>
           </Grid>
-          <Grid item xs={4} textAlign="end">
-            <PanelLabelText>Wallet balance</PanelLabelText>
-          </Grid>
-          <Grid item xs={2}></Grid>
-        </Grid>
-      </PanelLabel>
-      <UniswapV3LPList
-        uniswapV3LPList={getUniswapV3LPList()}
-        supplyOnClick={supplyOnClick}
-      />
-      <SupplyModal
-        isOpen={open}
-        handleClose={handleClose}
-        contractAddress={selectedContractAddress}
-        handleSupply={handleSupplyClicked}
-      />
-    </Panel>
+        </PanelLabel>
+        <UniswapV3LPList
+          uniswapV3LPList={getUniswapV3LPList()}
+          supplyOnClick={supplyOnClick}
+        />
+        <SupplyModal
+          isOpen={open}
+          handleClose={handleClose}
+          uniswapV3LP={selectedUniswapV3LP}
+          handleSupply={handleSupplyClicked}
+        />
+      </Panel>
+    </ThemeProvider>
   );
 }

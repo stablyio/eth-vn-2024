@@ -2,6 +2,7 @@ import { Box, Modal } from "@mui/material";
 import { BorrowForm } from "./BorrowForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { borrowLending } from "@/redux/borrowlending";
+import { AssetProp } from "@/config";
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,14 +19,14 @@ const style = {
 export interface BorrowModalProps {
   isOpen: boolean;
   handleClose: () => void;
-  contractAddress: string;
-  handleBorrow: (contractAddress: string, amount: number) => void;
+  asset: AssetProp;
+  handleBorrow: (asset: AssetProp, amount: number) => void;
 }
 
 export function BorrowModal({
   isOpen,
   handleClose,
-  contractAddress,
+  asset,
   handleBorrow,
 }: BorrowModalProps) {
   const dispatch = useAppDispatch();
@@ -37,7 +38,7 @@ export function BorrowModal({
   );
 
   const onBorrow = (amount: number) => {
-    handleBorrow && handleBorrow(contractAddress, amount);
+    handleBorrow && handleBorrow(asset, amount);
   };
 
 
@@ -51,7 +52,7 @@ export function BorrowModal({
       <Box sx={style}>
         <BorrowForm
           availableAmount={''}
-          symbol="USDC"
+          asset={asset}
           onBorrow={onBorrow}
           isLoading={isLoading}
           errorMessage={errorMessage}

@@ -1,4 +1,7 @@
-import { walletSwitchToLineaNetwork } from "@/libs/providers";
+import {
+  connectBrowserExtensionWallet,
+  walletSwitchToLineaNetwork,
+} from "@/libs/providers";
 import { MetaMaskButton } from "@metamask/sdk-react-ui";
 import { useSDK } from "@metamask/sdk-react";
 import { getCurrentNetworkConfig } from "@/config";
@@ -15,6 +18,10 @@ export function MetamaskButton() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    connectBrowserExtensionWallet();
+  }, []);
+
+  useEffect(() => {
     if (account) {
       dispatch(walletSlice.actions.updateWalletAddress(account));
     }
@@ -28,5 +35,5 @@ export function MetamaskButton() {
     );
   }
 
-  return <MetaMaskButton></MetaMaskButton>;
+  return <MetaMaskButton theme="light"></MetaMaskButton>;
 }

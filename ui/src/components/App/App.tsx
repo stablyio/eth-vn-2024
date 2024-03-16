@@ -4,7 +4,7 @@ import RootLayout from "./layout";
 import { MetaMaskProvider } from "@metamask/sdk-react";
 import { MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 
-import { CssBaseline, Grid, ThemeProvider, createTheme } from "@mui/material";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { store } from "../../store";
 import { SupplyBorrowPanel } from "./SupplyBorrowPanel";
 import { WalletPanel } from "./WalletPanel";

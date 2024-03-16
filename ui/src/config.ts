@@ -9,6 +9,13 @@ export interface NetworkConfig {
   rpcURL: string;
 }
 
+export interface AssetProp {
+  address: string;
+  symbol: string;
+  decimals: number;
+  logoName: string;
+}
+
 export interface UniswapV3LP {
   address: string;
   name: string;

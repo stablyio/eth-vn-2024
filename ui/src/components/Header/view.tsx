@@ -23,7 +23,12 @@ export const Header = ({ position }: HeaderProps) => {
       <Box bgcolor={"blackLighter"}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="space-between"
+              sx={{ display: "flex", alignItems: "center", width: "100%" }}
+            >
               <img src={stablyLogo} alt="logo" style={{ maxHeight: "32px" }} />
               <MetamaskButton></MetamaskButton>
             </Stack>

@@ -5,6 +5,7 @@ import { walletSlice } from "@/redux/wallet";
 import { borrowLending } from "@/redux/borrowlending";
 import { useState } from "react";
 import { CustomTabPanel } from "../Tab/TabGroup";
+import { UniswapV3LP } from "@/config";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,19 +17,20 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  color: "black"
 };
 
 export interface SupplyModalProps {
   isOpen: boolean;
   handleClose: () => void;
-  contractAddress: string;
-  handleSupply: (contractAddress: string, amount: number) => void;
+  uniswapV3LP: UniswapV3LP;
+  handleSupply: (uniswapV3LP: UniswapV3LP, amount: number) => void;
 }
 
 export function SupplyModal({
   isOpen,
   handleClose,
-  contractAddress,
+  uniswapV3LP,
   handleSupply,
 }: SupplyModalProps) {
   const [tabValue, setTabValue] = useState(0);
@@ -36,7 +38,7 @@ export function SupplyModal({
   const dispatch = useAppDispatch();
   // Get the ERC20 balance of the connected wallet
   const balanceOfAddress = useAppSelector((state) =>
-    walletSlice.selectors.getReadableBalance(state, contractAddress)
+    walletSlice.selectors.getReadableBalance(state, uniswapV3LP?.address)
   );
   const isLoading = useAppSelector((state) =>
     borrowLending.selectors.getLoading(state)
@@ -46,7 +48,7 @@ export function SupplyModal({
   );
 
   const onSupply = (amount: number) => {
-    handleSupply && handleSupply(contractAddress, amount);
+    handleSupply && handleSupply(uniswapV3LP, amount);
   };
 
   const changeTabValue = (event: React.SyntheticEvent, newValue: number) => {
@@ -75,6 +77,7 @@ export function SupplyModal({
             onSupply={onSupply}
             isLoading={isLoading}
             errorMessage={errorMessage}
+            asset={uniswapV3LP}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={1}>
