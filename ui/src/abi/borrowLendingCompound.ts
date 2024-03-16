@@ -1,11 +1,13 @@
 import { ethers, providers } from "ethers";
-// import QuadraticBorrowCompound from "./QuadraticBorrowCompound.json";
 
 export const QuadraticBorrowCompound_ABI = [
   // Read-Only Functions
+  "function v3NFTBorrow(uint256 pid, uint256 tokenId, uint256 borrowAmount) public",
+  "function userReturn(uint256 bid, uint256 repayAmount) public ",
 ];
 
-const LendUserInfo = "tuple(uint256 lastLendInterestShare, uint256 unRecvInterests, uint256 currTotalLend, uint256 userDli)"
+const LendUserInfo =
+  "tuple(uint256 lastLendInterestShare, uint256 unRecvInterests, uint256 currTotalLend, uint256 userDli)";
 export const QuadraticLendingCompound_ABI = [
   // Read-Only Functions
   "function userLend(uint256 _pid, uint256 _amount) public",

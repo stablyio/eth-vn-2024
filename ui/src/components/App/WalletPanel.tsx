@@ -6,15 +6,27 @@ import {
 } from "@/redux/ethereumProvider";
 import { walletSlice } from "@/redux/wallet";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { Button, Grid, styled } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  Paper,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useEffect } from "react";
 
-const BalanceWrapper = styled("div")({});
+const BalanceWrapper = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  flexDirection: "column",
+});
 
-const Title = styled("div")({
+const Title = styled("span")({
+  // backgroundColor: "#CFD8DC",
   color: "#FFFFFF",
   fontWeight: 600,
-  fontSize: "1.5rem",
+  fontSize: "1.2rem",
 });
 
 const WalletPanelWrapper = styled("div")({
@@ -26,9 +38,12 @@ const WalletPanelWrapper = styled("div")({
 });
 
 const CenterWrapper = styled("div")({
-  borderRadius: "50%",
-  maxWidth: "150px",
+  width: "100%",
+  height: "100%",
   display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyItems: "center",
   justifyContent: "center",
 });
 
@@ -61,39 +76,70 @@ export function WalletPanel() {
 
   return (
     <WalletPanelWrapper sx={{ color: "white" }}>
-      <Grid container>
-        <Grid item xs={3}>
+      {/* <Paper elevation={0} />
+      <Paper />
+      <Paper elevation={3} /> */}
+      {/* <Divider orientation="vertical" variant="middle" /> */}
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          paddingTop: "2rem",
+        }}
+      >
+        <Grid item md={2} xs={0}></Grid>
+        <Grid item md={3} xs={12} justifyContent="center">
           <BalanceWrapper>
-            <Title>Supply balance</Title>
+            <Title>Supply Balance</Title>
+            <div>0</div>
+          </BalanceWrapper>
+        </Grid>
+        <Grid item md={3} xs={12}>
+          <BalanceWrapper>
+            <Title>Borrow Balance</Title>
             <div>0</div>
           </BalanceWrapper>
         </Grid>
 
-        <Grid item xs={6} alignContent="center" justifyContent="center">
+        <Grid
+          item
+          md={3}
+          xs={12}
+          alignContent="center"
+          justifyContent="center"
+          sx={
+            {
+              // backgroundColor: "black",
+              // borderRadius: "50%",
+              // width: "150px",
+              // height: "150px",
+            }
+          }
+          style={{
+            flexBasis: "auto",
+          }}
+        >
           <CenterWrapper>
             {shouldChangeNetwork ? (
               <Button onClick={() => walletSwitchToLineaNetwork()}>
                 Switch to Linea Network
               </Button>
             ) : (
-              <div>
-                <div>Chan ID</div>
-                <div>
+              <>
+                <span>Chan ID</span>
+                <span>
                   <b>{chainID ?? "N/A"}</b>
-                </div>
-                <div>Account</div>
-                <div>{account ?? "N/A"}</div>
-              </div>
+                </span>
+                <span>Account</span>
+                <Typography noWrap component="span" sx={{ width: "100px" }}>
+                  {account ?? "N/A"}
+                </Typography>
+              </>
             )}
           </CenterWrapper>
         </Grid>
 
-        <Grid item xs={3}>
-          <BalanceWrapper>
-            <Title sx={{ color: "black" }}>Borrow Balance</Title>
-            <div>0</div>
-          </BalanceWrapper>
-        </Grid>
+        <Grid item md={2} xs={0}></Grid>
       </Grid>
     </WalletPanelWrapper>
   );

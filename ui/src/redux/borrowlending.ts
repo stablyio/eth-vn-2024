@@ -45,6 +45,30 @@ function getLendingContract(
   return lendingContract;
 }
 
+function getBorrowContract(
+  getState: () => {
+    borrowLending: BorrowLendingState;
+  },
+  rejectWithValue: (value: { error: string }) => void
+) {
+  const contractAddress = getState().borrowLending.borrowContractAddress;
+  if (!contractAddress) {
+    return rejectWithValue({ error: "No contract address provided" });
+  }
+
+  const provider = getProvider();
+  if (!provider) {
+    return rejectWithValue({ error: "No provider" });
+  }
+
+  const lendingContract = getQuadraticLendingCompound(
+    contractAddress,
+    provider
+  );
+
+  return lendingContract;
+}
+
 export const borrowLending = createSlice({
   name: "borrowLending",
   initialState,
@@ -166,4 +190,34 @@ export const getLendingPoolOfCurrentWallet = createAsyncThunk<
   }
 
   return { lendPools: [lendPool] };
+});
+
+export const userBorrow = createAsyncThunk<
+  {},
+  { amount: number },
+  {
+    state: { borrowLending: BorrowLendingState; wallet: WalletState };
+    rejectValue: { error: string };
+  }
+>("borrow/userBorrow", async ({ amount }, { getState, rejectWithValue }) => {
+  const walletAddress = getState().wallet.address;
+
+  const borrowContract = await getBorrowContract(getState, rejectWithValue);
+  if (!borrowContract) {
+    return rejectWithValue({ error: "No lending contract" });
+  }
+
+  //TODO: Get pool ID from lpTokenAddress
+  const poolIdFromToken = 2;
+  const transaction = await borrowContract.populateTransaction.v3NFTBorrow(
+    0,
+    poolIdFromToken,
+    BigNumber.from(amount)
+  );
+  await sendTransaction({
+    ...transaction,
+    from: walletAddress,
+  });
+
+  return {};
 });
