@@ -1,7 +1,9 @@
 import { Box, Modal } from "@mui/material";
 import { SupplyForm } from "./SupplyForm";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { walletSlice } from "@/redux/wallet";
+import { borrowLending } from "@/redux/borrowlending";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute" as "absolute",
@@ -19,17 +21,34 @@ export interface SupplyModalProps {
   isOpen: boolean;
   handleClose: () => void;
   contractAddress: string;
+  handleSupply: (contractAddress: string, amount: number) => void;
 }
 
 export function SupplyModal({
   isOpen,
   handleClose,
   contractAddress,
+  handleSupply,
 }: SupplyModalProps) {
+  const dispatch = useAppDispatch();
   // Get the ERC20 balance of the connected wallet
   const balanceOfAddress = useAppSelector((state) =>
     walletSlice.selectors.getReadableBalance(state, contractAddress)
   );
+  const isLoading = useAppSelector((state) =>
+    borrowLending.selectors.getLoading(state)
+  );
+  const errorMessage = useAppSelector((state) =>
+    borrowLending.selectors.getErrorMessage(state)
+  );
+
+  const onSupply = (amount: number) => {
+    handleSupply && handleSupply(contractAddress, amount);
+  };
+
+  useEffect(() => {
+    dispatch(borrowLending.actions.updateContractAddress(contractAddress));
+  }, [contractAddress]);
 
   return (
     <Modal
@@ -39,7 +58,12 @@ export function SupplyModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <SupplyForm availableAmount={balanceOfAddress} />
+        <SupplyForm
+          availableAmount={balanceOfAddress}
+          onSupply={onSupply}
+          isLoading={isLoading}
+          errorMessage={errorMessage}
+        />
       </Box>
     </Modal>
   );

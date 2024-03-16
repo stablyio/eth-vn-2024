@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import { getProvider } from "./providers";
-import { CurrentConfig } from "@/config";
 
 export interface LendUserInfo {
     lastLendInterestShare: number;
@@ -17,19 +16,19 @@ export interface CompoundLendPool {
     totalRecvInterests: number; //User receives interest
 }
 
-export function getLendingBorrowContract(contractAddress: string): ethers.Contract {
-    const provider = getProvider()
-    if (!provider) {
-        throw new Error('No provider')
-    }
+// export function getLendingBorrowContract(contractAddress: string): ethers.Contract {
+//     const provider = getProvider()
+//     if (!provider) {
+//         throw new Error('No provider')
+//     }
 
-    return new ethers.Contract(
-        contractAddress,
-        // CurrentConfig.lendingBorrowContract.abi,
-        '',
-        provider
-    )
-}
+//     return new ethers.Contract(
+//         contractAddress,
+//         // CurrentConfig.lendingBorrowContract.abi,
+//         '',
+//         provider
+//     )
+// }
 
 // export function getLendUserInfo(walletAddress: string): LendUserInfo {
 //   const lendingBorrowContract = getLendingBorrowContract()

@@ -64,7 +64,7 @@ export function UniswapV3LPList({
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!allBalances[uniswapV3LP.address]}
+                // disabled={false || !allBalances[uniswapV3LP.address]}
                 onClick={() => supplyOnClick(uniswapV3LP.address)}
               >
                 Supply

@@ -1,11 +1,11 @@
 import React from "react";
-import { Box, Button, Grid, Modal, styled } from "@mui/material";
+import { Box, Grid, styled } from "@mui/material";
 import styles from "./supplymarket.module.css";
-import { AssetBanner } from "../Asset";
-import { SupplyForm } from "../SupplyModal/SupplyForm";
 import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { UniswapV3LPList } from "./UniswapV3LPList";
 import { CurrentConfig } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { borrowLending, userLend } from "@/redux/borrowlending";
 
 const Item = styled(Box)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -18,16 +18,26 @@ const Item = styled(Box)(({ theme }) => ({
 export function SupplyMarket() {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
-  const [selectedContractAddress, setSelectedContractAddress] = React.useState("");
+  const [selectedContractAddress, setSelectedContractAddress] =
+    React.useState("");
+  const dispatch = useAppDispatch();
 
+ 
+ 
   const supplyOnClick = (contractAddress: string) => {
-    console.log("supplyOnClick", contractAddress);
-  }
+    setSelectedContractAddress(contractAddress);
+    setOpen(true);
+  };
+
+  // Call Contract to lend the LP token
+  const handleSupplyClicked = (lpTokenAddress: string, amount: number) => {
+    dispatch(userLend({ lpTokenAddress, amount }));
+  };
 
   return (
     <div>
       <h1>Supply Markets</h1>
-      <h2>Collteral your LSDs position(s) to borrowing assets.</h2>
+      <h3>Collteral your LSDs position(s) to borrowing assets.</h3>
       <div>
         <Grid
           container
@@ -47,8 +57,16 @@ export function SupplyMarket() {
         </Grid>
       </div>
       <div>
-        <UniswapV3LPList uniswapV3LPList={CurrentConfig.uniswapV3LP} supplyOnClick={supplyOnClick} /> 
-        <SupplyModal isOpen={open} handleClose={handleClose} contractAddress={selectedContractAddress} />
+        <UniswapV3LPList
+          uniswapV3LPList={CurrentConfig.uniswapV3LP}
+          supplyOnClick={supplyOnClick}
+        />
+        <SupplyModal
+          isOpen={open}
+          handleClose={handleClose}
+          contractAddress={selectedContractAddress}
+          handleSupply={handleSupplyClicked}
+        />
       </div>
     </div>
   );

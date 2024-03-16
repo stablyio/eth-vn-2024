@@ -1,10 +1,12 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { configureStore } from "@reduxjs/toolkit";
 import { walletSlice } from "./redux/wallet";
+import { borrowLending } from './redux/borrowlending';
 
 export const store = configureStore({
   reducer: {
     wallet: walletSlice.reducer,
+    borrowLending: borrowLending.reducer
   },
 });
 
