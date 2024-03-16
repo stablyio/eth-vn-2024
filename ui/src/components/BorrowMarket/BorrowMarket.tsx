@@ -4,7 +4,10 @@ import styles from "./borrowmarket.module.css";
 import { LiquidityAssetList } from "./LiquidityAssetList";
 import { AssetProp, UniswapV3LP, getErc20LiquidityAssets } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
+import {
+  getLendingPoolOfCurrentWallet,
+  userBorrow,
+} from "@/redux/borrowlending";
 import { BorrowModal } from "../BorrowModal/BorrowModal";
 import {
   Panel,
@@ -32,8 +35,9 @@ const Item = styled(Box)(({ theme }) => ({
 export function BorrowMarket() {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
-  const [selectedUniswapV3LP, setSelectedUniswapV3LP] =
-    React.useState<UniswapV3LP | undefined>();
+  const [selectedUniswapV3LP, setSelectedUniswapV3LP] = React.useState<
+    UniswapV3LP | undefined
+  >();
 
   const currentWalletAddress = useAppSelector((state) => state.wallet.address);
   const dispatch = useAppDispatch();
@@ -45,7 +49,10 @@ export function BorrowMarket() {
 
   // Call Contract to lend the LP token
   const handleBorrowClicked = (asset: AssetProp, amount: number) => {
-    // dispatch(userLend({ lpTokenAddress, amount }));
+    dispatch(userBorrow({ poolId: asset.lendingPoolId, amount })).then(() => {
+      dispatch(getLendingPoolOfCurrentWallet());
+      handleClose();
+    });
   };
 
   useEffect(() => {

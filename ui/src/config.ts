@@ -14,6 +14,7 @@ export interface AssetProp {
   symbol: string;
   decimals: number;
   logoName: string;
+  lendingPoolId: number;
 }
 
 export interface UniswapV3LP {

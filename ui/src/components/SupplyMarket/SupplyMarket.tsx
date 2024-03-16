@@ -12,6 +12,7 @@ import {
   PanelLabel,
   PanelLabelText,
 } from "../Panel/Panel";
+import { fetchERC20Balance } from "@/redux/wallet";
 
 const supplyTheme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ export function SupplyMarket() {
         userLend({ lendingPoolId: selectedUniswapV3LP.lendingPoolId, amount })
       ).then(() => {
         dispatch(getLendingPoolOfCurrentWallet());
+        dispatch(fetchERC20Balance({ contractAddress: asset.address }));
         handleClose();
       });
     }

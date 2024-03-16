@@ -1,4 +1,4 @@
-import { getQuadraticLendingCompound } from "@/abi/borrowLendingCompound";
+import { getQuadraticBorrowCompound, getQuadraticLendingCompound } from "@/abi/borrowLendingCompound";
 import {
   TransactionState,
   getProvider,
@@ -65,12 +65,12 @@ function getBorrowContract(
     return rejectWithValue({ error: "No provider" });
   }
 
-  const lendingContract = getQuadraticLendingCompound(
+  const borrowContract = getQuadraticBorrowCompound(
     contractAddress,
     provider
   );
 
-  return lendingContract;
+  return borrowContract;
 }
 
 export const borrowLending = createSlice({
@@ -158,7 +158,7 @@ export const userLend = createAsyncThunk<
       ...transaction,
       from: walletAddress,
     });
-    console.log("transactionData", transactionData);
+    // console.log("transactionData", transactionData);
     if (transactionData != TransactionState.Sent) {
       return rejectWithValue({ error: "Transaction failed" });
     }
@@ -235,12 +235,12 @@ export const getLendingPoolOfCurrentWallet = createAsyncThunk<
 
 export const userBorrow = createAsyncThunk<
   {},
-  { amount: number },
+  { poolId: number, amount: number },
   {
     state: { borrowLending: BorrowLendingState; wallet: WalletState };
     rejectValue: { error: string };
   }
->("borrow/userBorrow", async ({ amount }, { getState, rejectWithValue }) => {
+>("borrow/userBorrow", async ({ poolId, amount }, { getState, rejectWithValue }) => {
   const walletAddress = getState().wallet.address;
 
   const borrowContract = await getBorrowContract(getState, rejectWithValue);
@@ -248,17 +248,19 @@ export const userBorrow = createAsyncThunk<
     return rejectWithValue({ error: "No lending contract" });
   }
 
-  //TODO: Get pool ID from lpTokenAddress
-  const poolIdFromToken = 2;
   const transaction = await borrowContract.populateTransaction.v3NFTBorrow(
     0,
-    poolIdFromToken,
+    poolId,
     BigNumber.from(amount)
   );
-  await sendTransaction({
+  const transactionData = await sendTransaction({
     ...transaction,
     from: walletAddress,
   });
+  console.log("transactionData", transactionData);
+  if (transactionData != TransactionState.Sent) {
+    return rejectWithValue({ error: "Transaction failed" });
+  }
 
   return {};
 });
