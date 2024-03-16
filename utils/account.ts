@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { HardhatRuntimeEnvironment, HttpNetworkConfig } from "hardhat/types";
 
 export function getMnemonic(networkName: string): string {
   const mnemonicKey = "MNEMONIC_" + networkName.toUpperCase();
@@ -11,19 +12,35 @@ export function getMnemonic(networkName: string): string {
   return "";
 }
 
-export function getWallet(networkName: string): ethers.BaseWallet {
-  if (networkName === "localhost") {
+export function getWallet(
+  hre: HardhatRuntimeEnvironment,
+): ethers.BaseWallet {
+  const { network } = hre;
+  const provider = getProvider(hre);
+  if (network.name === "localhost") {
     const pk = process.env.PRIVATE_KEY_LOCAL_TEST;
     if (pk && pk !== "") {
-      return new ethers.Wallet(pk);
+      return new ethers.Wallet(pk, provider);
     }
-    throw new Error("No private key found for network: " + networkName);
+    throw new Error("No private key found for network: " + network.name);
   }
 
-  const mnemonic = getMnemonic(networkName);
+  const mnemonic = getMnemonic(network.name);
   if (!mnemonic || mnemonic === "") {
-    throw new Error("No mnemonic found for network: " + networkName);
+    throw new Error("No mnemonic found for network: " + network.name);
   }
 
-  return ethers.Wallet.fromPhrase(mnemonic);
+  return ethers.Wallet.fromPhrase(mnemonic, provider);
+}
+
+export function getProvider(
+  hre: HardhatRuntimeEnvironment,
+): ethers.Provider {
+  const { network } = hre;
+  if (network.name != "localhost") {
+    return new ethers.JsonRpcProvider("http://localhost:8545")
+  } else {
+    const networkConfig = network.config as HttpNetworkConfig;
+    return new ethers.JsonRpcProvider(networkConfig.url);
+  }
 }

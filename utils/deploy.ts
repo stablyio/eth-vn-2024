@@ -1,6 +1,7 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { HardhatRuntimeEnvironment, HttpNetworkConfig } from "hardhat/types";
 import { getWallet } from "./account";
 import { DeployResult } from "hardhat-deploy/types";
+import { ethers } from "hardhat";
 
 export async function deployContract(
   contractName: string,
@@ -8,10 +9,10 @@ export async function deployContract(
   gasLimit: number | undefined, // undefined means use the default gas limit
   hre: HardhatRuntimeEnvironment,
 ): Promise<DeployResult> {
-  const { deployments, network } = hre;
+  const { deployments } = hre;
   const { deploy } = deployments;
 
-  const wallet = getWallet(network.name);
+  const wallet = getWallet(hre);
 
   const deployed = await deploy(contractName, {
     from: wallet.address,
