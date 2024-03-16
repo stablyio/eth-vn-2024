@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, styled } from "@mui/material";
 import styles from "./borrowmarket.module.css";
 import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { LiquidityAssetList } from "./LiquidityAssetList";
 import { CurrentConfig, getErc20LiquidityAssets, getUniswapV3LPList } from "@/config";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
 
 const Item = styled(Box)(({ theme }) => ({
   ...theme.typography.body2,
@@ -18,6 +19,8 @@ export function BorrowMarket() {
   const handleClose = () => setOpen(false);
   const [selectedContractAddress, setSelectedContractAddress] =
     React.useState("");
+  
+  const currentWalletAddress = useAppSelector((state) => state.wallet.address);
   const dispatch = useAppDispatch();
  
  
@@ -30,6 +33,11 @@ export function BorrowMarket() {
   const handleSupplyClicked = (lpTokenAddress: string, amount: number) => {
     // dispatch(userLend({ lpTokenAddress, amount }));
   };
+
+  useEffect(() => {
+    dispatch(getLendingPoolOfCurrentWallet());
+  }, [currentWalletAddress]);
+
 
   return (
     <div className={styles.borrowMarketPanel}>

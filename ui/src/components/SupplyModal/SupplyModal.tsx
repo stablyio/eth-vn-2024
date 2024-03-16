@@ -46,9 +46,6 @@ export function SupplyModal({
     handleSupply && handleSupply(contractAddress, amount);
   };
 
-  useEffect(() => {
-    dispatch(borrowLending.actions.updateContractAddress(contractAddress));
-  }, [contractAddress]);
 
   return (
     <Modal

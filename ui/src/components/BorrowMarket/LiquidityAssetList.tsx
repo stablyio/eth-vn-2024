@@ -1,9 +1,10 @@
 import { Button, Grid } from "@mui/material";
 import { AssetBanner } from "../Asset";
 import { ERC20LiquidityAsset } from "@/config";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { walletSlice } from "@/redux/wallet";
+import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
 
 export interface UniswapV3LPListProps {
   erc20LiquidityAssets: ERC20LiquidityAsset[];
@@ -11,10 +12,12 @@ export interface UniswapV3LPListProps {
 }
 
 export function useLiquidityAssetList() {
+  const dispatch = useAppDispatch();
   const walletAddress = useAppSelector((state) =>
     walletSlice.selectors.getAddress(state)
   );
 
+  
   return {};
 }
 

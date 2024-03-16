@@ -23,11 +23,13 @@ export interface ERC20LiquidityAsset {
   decimals: number;
 }
 
+export interface LendingBorrowContract {
+  lendingContractAddress: string;
+  borrowContractAddress: string;
+}
+
 export interface PerEnvConfig {
-  lendingBorrowContract: {
-    lendingContractAddress: string;
-    borrowContractAddress: string;
-  };
+  lendingBorrowContract: LendingBorrowContract;
   lineaNetworkConfig: NetworkConfig;
   uniswapV3LP: UniswapV3LP[];
   erc20LiquidityAssets: ERC20LiquidityAsset[];
@@ -80,8 +82,8 @@ export const CurrentConfig: AppConfig = {
     },
     [Environment.BETA]: {
       lendingBorrowContract: {
-        lendingContractAddress: "",
-        borrowContractAddress: "",
+        lendingContractAddress: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        borrowContractAddress: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       },
       lineaNetworkConfig: {
         networkName: "Linea Testnet",
@@ -118,4 +120,8 @@ export function getUniswapV3LPList(): UniswapV3LP[] {
 
 export function getErc20LiquidityAssets(): ERC20LiquidityAsset[] {
   return CurrentConfig.perEnv[CurrentConfig.env].erc20LiquidityAssets;
+}
+
+export function getLendingBorrowContract(): LendingBorrowContract {
+  return CurrentConfig.perEnv[CurrentConfig.env].lendingBorrowContract;
 }
