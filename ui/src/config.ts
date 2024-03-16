@@ -66,10 +66,10 @@ export const CurrentConfig: AppConfig = {
       },
       uniswapV3LP: [
         {
-          address: "0x63AF6F0DD26C8ECe6b057c6224762dC7da0B6B04",
-          name: "SyncSwap USDT/USDC Classic LP",
-          symbol: "USDT/USDC cSLP",
-          decimals: 18,
+          address: "0xacfa791c833120c769fd3066c940b7d30cd8bc73",
+          name: "Pancake V3 ETH/USDC Positions NFT-LP",
+          symbol: "ETH/USDC PCS-V3-POS",
+          decimals: 0,
         },
       ],
       erc20LiquidityAssets: [
@@ -78,7 +78,7 @@ export const CurrentConfig: AppConfig = {
           name: "USDC",
           symbol: "USDC",
           decimals: 6,
-          lendingPoolId: 0,
+          lendingPoolId: 2,
         },
       ],
     },
@@ -94,10 +94,10 @@ export const CurrentConfig: AppConfig = {
       },
       uniswapV3LP: [
         {
-          address: "0x63AF6F0DD26C8ECe6b057c6224762dC7da0B6B04",
-          name: "SyncSwap USDT/USDC Classic LP",
-          symbol: "USDT/USDC cSLP",
-          decimals: 6,
+          address: "0xacfa791c833120c769fd3066c940b7d30cd8bc73",
+          name: "Pancake V3 ETH/USDC Positions NFT-LP",
+          symbol: "ETH/USDC PCS-V3-POS",
+          decimals: 0,
         },
       ],
       erc20LiquidityAssets: [
@@ -106,7 +106,7 @@ export const CurrentConfig: AppConfig = {
           name: "USDC",
           symbol: "USDC",
           decimals: 6,
-          lendingPoolId: 0,
+          lendingPoolId: 2,
         },
       ],
     },
