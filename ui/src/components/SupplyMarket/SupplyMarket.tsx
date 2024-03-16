@@ -35,7 +35,7 @@ export function SupplyMarket() {
           <Grid item xs={3} padding={0}>
             <PanelLabelText>Asset</PanelLabelText>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} textAlign="end">
             <PanelLabelText>Wallet balance</PanelLabelText>
           </Grid>
           <Grid item xs={3}></Grid>

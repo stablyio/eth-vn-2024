@@ -68,7 +68,7 @@ export const CurrentConfig: AppConfig = {
         {
           address: "0xacfa791c833120c769fd3066c940b7d30cd8bc73",
           name: "Pancake V3 ETH/USDC Positions NFT-LP",
-          symbol: "ETH/USDC PCS-V3-POS",
+          symbol: "ETH/USDC",
           decimals: 0,
         },
       ],
@@ -96,7 +96,7 @@ export const CurrentConfig: AppConfig = {
         {
           address: "0xacfa791c833120c769fd3066c940b7d30cd8bc73",
           name: "Pancake V3 ETH/USDC Positions NFT-LP",
-          symbol: "ETH/USDC PCS-V3-POS",
+          symbol: "ETH/USDC POS",
           decimals: 0,
         },
       ],

@@ -6,6 +6,7 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "build"),
+    assetModuleFilename: 'images/[hash][ext][query]'
   },
   module: {
     rules: [
@@ -32,11 +33,18 @@ module.exports = {
       {
         test: /\.svg$/,
         use: ["@svgr/webpack", "url-loader"],
-      }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "images/[hash][ext][query]",
+        },
+      },
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx", ".css", ".svg"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: {
       "@": path.resolve(__dirname, "src"),
     },

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { walletSlice } from "@/redux/wallet";
 import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
+import { AssetNumber } from "../Asset/AssetNumber";
 
 export interface UniswapV3LPListProps {
   erc20LiquidityAssets: ERC20LiquidityAsset[];
@@ -36,12 +37,13 @@ export function LiquidityAssetList({
             alignItems="center"
             justifyContent="center"
             key={uniswapV3LP.address}
+            columnSpacing={3}
           >
             <Grid item xs={3}>
-              <AssetBanner assetTicket={uniswapV3LP.symbol} />
+              <AssetBanner assetTicket={uniswapV3LP.symbol} name={uniswapV3LP.name} />
             </Grid>
-            <Grid item xs={6}>
-              {"-"}
+            <Grid item xs={6} textAlign="end">
+              <AssetNumber>{"0"}</AssetNumber> {uniswapV3LP.symbol}
             </Grid>
             <Grid item xs={3}>
               <Button

@@ -4,6 +4,7 @@ import { UniswapV3LP } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { fetchERC20Balance, walletSlice } from "@/redux/wallet";
+import { AssetNumber } from "../Asset/AssetNumber";
 
 export interface UniswapV3LPListProps {
   uniswapV3LPList: UniswapV3LP[];
@@ -42,7 +43,8 @@ export function UniswapV3LPList({
   uniswapV3LPList,
   supplyOnClick,
 }: UniswapV3LPListProps) {
-  const { allBalances, allReadableBalances } = useUniswapV3LPList(uniswapV3LPList);
+  const { allBalances, allReadableBalances } =
+    useUniswapV3LPList(uniswapV3LPList);
 
   return (
     <div>
@@ -53,12 +55,19 @@ export function UniswapV3LPList({
             alignItems="center"
             justifyContent="center"
             key={uniswapV3LP.address}
+            columnSpacing={3}
           >
-            <Grid item xs={3}>
-              <AssetBanner assetTicket={uniswapV3LP.symbol} />
-            </Grid>
             <Grid item xs={6}>
-              {allReadableBalances[uniswapV3LP.address] ?? "-"}
+              <AssetBanner
+                assetTicket={uniswapV3LP.symbol}
+                name={uniswapV3LP.name}
+              />
+            </Grid>
+            <Grid item xs={3} textAlign="end">
+              <AssetNumber>
+                {allReadableBalances[uniswapV3LP.address] ?? "0"}
+              </AssetNumber>{" "}
+              {uniswapV3LP.symbol}
             </Grid>
             <Grid item xs={3}>
               <Button

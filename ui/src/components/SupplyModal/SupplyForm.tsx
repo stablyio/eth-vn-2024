@@ -19,7 +19,7 @@ export function SupplyForm({
 
   return (
     <Stack>
-      <AssetInput num={value} onChange={setValue} />
+      <AssetInput num={value} onChange={setValue} symbol="USDC" />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <p>Supplyable amount</p>
         <p>{availableAmount}</p>

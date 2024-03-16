@@ -1,5 +1,6 @@
-import { AppBar, Box, Container, Toolbar } from "@mui/material";
+import { AppBar, Box, Container, Stack, Toolbar } from "@mui/material";
 import { MetamaskButton } from "./MetamaskButton";
+import stablyLogo from "../../../public/icons/stably_logo.png";
 
 interface HeaderProps {
   position?:
@@ -22,7 +23,10 @@ export const Header = ({ position }: HeaderProps) => {
       <Box bgcolor={"blackLighter"}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <MetamaskButton></MetamaskButton>
+            <Stack direction="row" spacing={2} justifyContent="space-between">
+              <img src={stablyLogo} alt="logo" style={{ maxHeight: "32px" }} />
+              <MetamaskButton></MetamaskButton>
+            </Stack>
           </Toolbar>
         </Container>
       </Box>

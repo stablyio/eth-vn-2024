@@ -7,19 +7,21 @@ export interface BorrowFormProps {
   isLoading: boolean;
   errorMessage: string;
   availableAmount: string;
+  symbol: string;
   onBorrow: (amount: number) => void;
 }
 export function BorrowForm({
   isLoading,
   errorMessage,
   availableAmount,
+  symbol,
   onBorrow,
 }: BorrowFormProps) {
   const [value, setValue] = React.useState<number | null>(null);
 
   return (
     <Stack>
-      <AssetInput num={value} onChange={setValue} />
+      <AssetInput num={value} onChange={setValue} symbol={symbol} />
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <p>Available amount</p>
         <p>{availableAmount}</p>

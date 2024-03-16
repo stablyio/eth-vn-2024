@@ -1,9 +1,7 @@
 import { Box, Modal } from "@mui/material";
 import { BorrowForm } from "./BorrowForm";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { walletSlice } from "@/redux/wallet";
 import { borrowLending } from "@/redux/borrowlending";
-import { useEffect } from "react";
 
 const style = {
   position: "absolute" as "absolute",
@@ -53,6 +51,7 @@ export function BorrowModal({
       <Box sx={style}>
         <BorrowForm
           availableAmount={''}
+          symbol="USDC"
           onBorrow={onBorrow}
           isLoading={isLoading}
           errorMessage={errorMessage}

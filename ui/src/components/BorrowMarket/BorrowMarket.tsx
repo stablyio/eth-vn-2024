@@ -6,7 +6,7 @@ import { getErc20LiquidityAssets } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
 import { BorrowModal } from "../BorrowModal/BorrowModal";
-import { Panel, PanelHeader, PanelLabel } from "../Panel/Panel";
+import { Panel, PanelHeader, PanelLabel, PanelLabelText } from "../Panel/Panel";
 
 const Item = styled(Box)(({ theme }) => ({
   ...theme.typography.body2,
@@ -40,19 +40,21 @@ export function BorrowMarket() {
 
   return (
     <Panel>
-      <PanelHeader><h4>Borrow Markets</h4></PanelHeader>
+      <PanelHeader>
+        <h4>Borrow Markets</h4>
+      </PanelHeader>
       <h4>To borrow you need to supply any asset to be used as collateral.</h4>
-      <div>
+      <PanelLabel>
         <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={3} padding={0}>
-            <PanelLabel>Asset</PanelLabel>
+            <PanelLabelText>Asset</PanelLabelText>
           </Grid>
           <Grid item xs={6}>
-            <PanelLabel>Liquidity</PanelLabel>
+            <PanelLabelText>Liquidity</PanelLabelText>
           </Grid>
           <Grid item xs={3}></Grid>
         </Grid>
-      </div>
+      </PanelLabel>
       <div>
         <LiquidityAssetList
           erc20LiquidityAssets={getErc20LiquidityAssets()}
