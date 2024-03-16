@@ -1,12 +1,6 @@
-import { ethers, providers, BigNumber } from "ethers";
-import { BaseProvider } from "@ethersproject/providers";
-import { CurrentConfig, Environment, getCurrentNetworkConfig } from "@/config";
+import { ethers, providers } from "ethers";
+import { getCurrentNetworkConfig } from "@/config";
 
-// Single copies of provider and wallet
-const mainnetProvider = new ethers.providers.JsonRpcProvider(
-  CurrentConfig.rpc.mainnet
-);
-const wallet = createWallet();
 
 const browserExtensionProvider = createBrowserExtensionProvider();
 let walletExtensionAddress: string | null = null;
@@ -21,32 +15,18 @@ export enum TransactionState {
   Sent = "Sent",
 }
 
-// Provider and Wallet Functions
-
-export function getMainnetProvider(): BaseProvider {
-  return mainnetProvider;
-}
-
 export function getProvider(): providers.Provider | null {
-  return CurrentConfig.env === Environment.WALLET_EXTENSION
-    ? browserExtensionProvider
-    : wallet.provider;
+  return browserExtensionProvider;
 }
 
 export function getWalletAddress(): string | null {
-  return CurrentConfig.env === Environment.WALLET_EXTENSION
-    ? walletExtensionAddress
-    : wallet.address;
+  return walletExtensionAddress;
 }
 
 export async function sendTransaction(
   transaction: ethers.providers.TransactionRequest
 ): Promise<TransactionState> {
-  if (CurrentConfig.env === Environment.WALLET_EXTENSION) {
-    return sendTransactionViaExtension(transaction);
-  } else {
-    return sendTransactionViaWallet(transaction);
-  }
+  return sendTransactionViaExtension(transaction);
 }
 
 export async function connectBrowserExtensionWallet() {
@@ -68,13 +48,13 @@ export async function connectBrowserExtensionWallet() {
 
 // Internal Functionality
 
-function createWallet(): ethers.Wallet {
-  let provider = mainnetProvider;
-  if (CurrentConfig.env == Environment.LOCAL) {
-    provider = new ethers.providers.JsonRpcProvider(CurrentConfig.rpc.local);
-  }
-  return new ethers.Wallet(CurrentConfig.wallet.privateKey, provider);
-}
+// function createWallet(): ethers.Wallet {
+//   let provider = mainnetProvider;
+//   if (CurrentConfig.env == Environment.LOCAL) {
+//     provider = new ethers.providers.JsonRpcProvider(CurrentConfig.rpc.local);
+//   }
+//   return new ethers.Wallet(CurrentConfig.wallet.privateKey, provider);
+// }
 
 function createBrowserExtensionProvider(): ethers.providers.Web3Provider | null {
   try {
@@ -105,43 +85,43 @@ async function sendTransactionViaExtension(
   }
 }
 
-async function sendTransactionViaWallet(
-  transaction: ethers.providers.TransactionRequest
-): Promise<TransactionState> {
-  if (transaction.value) {
-    transaction.value = BigNumber.from(transaction.value);
-  }
-  const txRes = await wallet.sendTransaction(transaction);
+// async function sendTransactionViaWallet(
+//   transaction: ethers.providers.TransactionRequest
+// ): Promise<TransactionState> {
+//   if (transaction.value) {
+//     transaction.value = BigNumber.from(transaction.value);
+//   }
+//   const txRes = await wallet.sendTransaction(transaction);
 
-  let receipt = null;
-  const provider = getProvider();
-  if (!provider) {
-    return TransactionState.Failed;
-  }
+//   let receipt = null;
+//   const provider = getProvider();
+//   if (!provider) {
+//     return TransactionState.Failed;
+//   }
 
-  while (receipt === null) {
-    try {
-      receipt = await provider.getTransactionReceipt(txRes.hash);
+//   while (receipt === null) {
+//     try {
+//       receipt = await provider.getTransactionReceipt(txRes.hash);
 
-      if (receipt === null) {
-        continue;
-      }
-    } catch (e) {
-      console.log(`Receipt error:`, e);
-      break;
-    }
-  }
+//       if (receipt === null) {
+//         continue;
+//       }
+//     } catch (e) {
+//       console.log(`Receipt error:`, e);
+//       break;
+//     }
+//   }
 
-  // Transaction was successful if status === 1
-  if (receipt) {
-    return TransactionState.Sent;
-  } else {
-    return TransactionState.Failed;
-  }
-}
+//   // Transaction was successful if status === 1
+//   if (receipt) {
+//     return TransactionState.Sent;
+//   } else {
+//     return TransactionState.Failed;
+//   }
+// }
 
 export async function walletSwitchToLineaNetwork() {
-  const chainIDHex = ethers.utils.hexlify(getCurrentNetworkConfig().chainID)
+  const chainIDHex = ethers.utils.hexlify(getCurrentNetworkConfig().chainID);
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
