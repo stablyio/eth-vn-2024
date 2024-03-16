@@ -13,7 +13,6 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 
 import "../libraries/QuadraticStrings.sol";
 
-import "../governance/RoleControl.sol";
 import "./QuadraticFinanceToken.sol";
 
 import "../interfaces/IQuadraticLendCompoundStorage.sol";
@@ -21,7 +20,6 @@ import "../interfaces/IQuadraticBorrowCompound.sol";
 
 contract QuadraticLendCompound is
     IQuadraticLendCompoundStorage,
-    RoleControl,
     Initializable
 {
     using SafeMath for uint256;
@@ -154,29 +152,15 @@ contract QuadraticLendCompound is
             _interestPlatformRate < 10000,
             "The maximum ratio has been exceeded."
         );
-        _governance = msg.sender;
-        _grantRole(PAUSER_ROLE, msg.sender);
-
+       
         borrowCompound = _borrowCompound;
         maxBorrowRate = _maxBorrowRate;
         interestPlatformRate = _interestPlatformRate;
     }
 
-    function pausePool(uint256 _pid) external onlyRole(PAUSER_ROLE) {
-        CompoundLendPool memory _pool = lendPoolInfo[_pid];
-        _grantRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _pool.token);
-        emit PausePoolEvent(msg.sender, _pid, true);
-    }
-
-    function unpausePool(uint256 _pid) external onlyGovernance {
-        CompoundLendPool memory _pool = lendPoolInfo[_pid];
-        _revokeRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _pool.token);
-        emit PausePoolEvent(msg.sender, _pid, false);
-    }
-
     function setInterestPlatformRate(
         uint256 _interestPlatformRate
-    ) external onlyGovernance {
+    ) external {
         require(
             _interestPlatformRate < 10000,
             "The maximum ratio has been exceeded."
@@ -193,7 +177,7 @@ contract QuadraticLendCompound is
     function setAuthContractAccess(
         address _contractAddr,
         bool _flag
-    ) external onlyGovernance {
+    ) external {
         require(_contractAddr.isContract(), "address is not contract address.");
         authContractAccessMap[_contractAddr] = _flag;
         emit SetAuthContractAccessEvent(msg.sender, _contractAddr, _flag);
@@ -202,9 +186,7 @@ contract QuadraticLendCompound is
     /**
      *  _withUpdate :reserved
      **/
-    function addPool(ERC20 _token, bool _withUpdate) public onlyGovernance {
-        require(tokenOfPid[address(_token)] == 0, "Token is exists.");
-
+    function addPool(ERC20 _token, bool _withUpdate) public {
         address _spToken = _createToken(
             "Supply-Provider Token",
             tokenPrefix.concat(_token.symbol()),
@@ -231,13 +213,13 @@ contract QuadraticLendCompound is
         emit AddPoolEvent(msg.sender, address(_token), 0, _withUpdate);
     }
 
-    function setMaxBorrowRate(uint256 _maxBorrowRate) public onlyGovernance {
+    function setMaxBorrowRate(uint256 _maxBorrowRate) public {
         uint256 _beforeRate = maxBorrowRate;
         maxBorrowRate = _maxBorrowRate;
         emit SetMaxBorrowRateEvent(msg.sender, _beforeRate, maxBorrowRate);
     }
 
-    function setFunder(address _funder) external onlyGovernance {
+    function setFunder(address _funder) external {
         address _beforeVal = funder;
         funder = _funder;
         emit SetFunderEvent(msg.sender, _beforeVal, _funder);
@@ -247,8 +229,6 @@ contract QuadraticLendCompound is
         uint256 _pid,
         uint256 _amount
     ) external onlyFunderVistor {
-        checkPoolPause(lendPoolInfo[_pid].token);
-
         uint256 _totalAmount = funderPoolInterest[_pid];
         require(_totalAmount >= _amount, "Wrong amount.");
         funderPoolInterest[_pid] = funderPoolInterest[_pid].sub(_amount);
@@ -260,11 +240,10 @@ contract QuadraticLendCompound is
     function userLend(
         uint256 _pid,
         uint256 _amount
-    ) public nonReentrant whenNotPaused {
+    ) public {
         require(_amount > 0, "lend invalid amount");
 
         CompoundLendPool storage _pool = lendPoolInfo[_pid];
-        checkPoolPause(_pool.token);
 
         LendUserInfo storage user = lendUserInfos[msg.sender][_pid];
 
@@ -297,11 +276,9 @@ contract QuadraticLendCompound is
     function userRedeem(
         uint256 _pid,
         uint256 _amount
-    ) public nonReentrant whenNotPaused returns (uint256) {
+    ) public returns (uint256) {
         require(_amount >= 0, "invalid amount");
         CompoundLendPool storage _pool = lendPoolInfo[_pid];
-
-        checkPoolPause(_pool.token);
 
         LendUserInfo storage user = lendUserInfos[msg.sender][_pid];
         require(user.userDli >= _amount, "invalid amount");
@@ -372,7 +349,6 @@ contract QuadraticLendCompound is
         uint256 _pid = spTokenOfPid[spToken];
         require(amount > 0, "invalid amount");
         CompoundLendPool storage _pool = lendPoolInfo[_pid];
-        checkPoolPause(_pool.token);
 
         LendUserInfo storage _senderUser = lendUserInfos[sender][_pid];
         require(_senderUser.userDli >= amount, "invalid amount");
@@ -463,7 +439,6 @@ contract QuadraticLendCompound is
         uint256 amount
     ) external onlyBorrowVistor {
         CompoundLendPool storage _pool = lendPoolInfo[pid];
-        checkPoolPause(_pool.token);
 
         require(_pool.curSupply >= amount, "not enough amount borrow");
         _pool.curSupply = _pool.curSupply.sub(amount);
@@ -485,7 +460,6 @@ contract QuadraticLendCompound is
         uint256 amount
     ) external onlyBorrowVistor {
         CompoundLendPool storage _pool = lendPoolInfo[pid];
-        checkPoolPause(_pool.token);
 
         require(_pool.curBorrow >= amount, "current borrow amount error. ");
         _pool.curSupply = _pool.curSupply.add(amount);
@@ -500,7 +474,6 @@ contract QuadraticLendCompound is
         uint256 amount
     ) external onlyBorrowVistor {
         CompoundLendPool storage _pool = lendPoolInfo[pid];
-        checkPoolPause(_pool.token);
 
         _pool.curSupply = _pool.curSupply.add(amount);
         IERC20(_pool.token).safeTransferFrom(msg.sender, address(this), amount);
@@ -512,7 +485,6 @@ contract QuadraticLendCompound is
         uint256 amount
     ) external onlyBorrowVistor {
         CompoundLendPool storage _pool = lendPoolInfo[pid];
-        checkPoolPause(_pool.token);
 
         _pool.curBorrow = _pool.curBorrow.sub(amount);
         emit TransferToAuctionUpBorrowEvent(msg.sender, pid, amount);
@@ -554,13 +526,6 @@ contract QuadraticLendCompound is
         return tokens;
     }
 
-    function checkPoolPause(address _token) public view {
-        require(
-            !hasRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _token),
-            "This pool has been suspended."
-        );
-    }
-
     function _updateCompound(uint256 pid) private {
         borrowCompound.updateBorrowPool(pid);
     }
@@ -581,12 +546,12 @@ contract QuadraticLendCompound is
         assembly {
             _token := create2(
                 0x0,
-                add(0x20, deploymentData),
+                add(deploymentData, 0x20),
                 mload(deploymentData),
                 _salt
             )
         }
-        require(_token != address(0), "Create2: Failed on create token");
+        require(_token != address(0), "Create2: Failed on create SP token");
         return _token;
     }
 }

@@ -10,20 +10,16 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-import "../governance/RoleControl.sol";
-
 import "./QuadraticFinanceToken.sol";
 
 import "../uniswap/IUniswapV3Oracle.sol";
 
-import "../interfaces/IQuadraticAuction.sol";
 import "../interfaces/IQuadraticBorrowCompoundStorage.sol";
 import "../interfaces/IQuadraticLendCompoundStorage.sol";
 
 contract QuadraticBorrowCompound is
     IQuadraticBorrowCompoundStorage,
     IQuadraticLendCompoundStorage,
-    RoleControl,
     Initializable
 {
     using SafeMath for uint256;
@@ -190,16 +186,6 @@ contract QuadraticBorrowCompound is
         _;
     }
 
-    modifier authContractAccessChecker() {
-        if (msg.sender.isContract() || tx.origin != msg.sender) {
-            require(
-                hasRole(keccak256("CONTRACT_ACCESS_ROLE"), msg.sender),
-                "not whitelist vistor allow."
-            );
-        }
-        _;
-    }
-
     function doInitialize(
         address _uniswapV3,
         address _uniswapV3Oracle,
@@ -213,8 +199,6 @@ contract QuadraticBorrowCompound is
             _interestPlatformRate < 10_000,
             "The maximum ratio has been exceeded."
         );
-        _governance = msg.sender;
-        _grantRole(PAUSER_ROLE, msg.sender);
 
         uniswapV3 = IERC721(_uniswapV3);
         uniswapV3Oracle = IUniswapV3Oracle(_uniswapV3Oracle);
@@ -227,7 +211,7 @@ contract QuadraticBorrowCompound is
 
     function changeUniswapV3Oracle(
         address _uniswapV3Oracle
-    ) external onlyGovernance {
+    ) external {
         address _beforeVal = address(uniswapV3Oracle);
         uniswapV3Oracle = IUniswapV3Oracle(_uniswapV3Oracle);
         emit ChangeUniswapV3OracleEvent(
@@ -240,7 +224,7 @@ contract QuadraticBorrowCompound is
     function setMinSettingCollateral(
         uint256 _pid,
         uint256 _minAmount
-    ) external onlyGovernance {
+    ) external {
         uint256 _beforeVal = minSettingCollateral[_pid];
         minSettingCollateral[_pid] = _minAmount;
         emit MinSettingCollateralEvent(
@@ -253,7 +237,7 @@ contract QuadraticBorrowCompound is
 
     function setInterestPlatformRate(
         uint256 _interestPlatformRate
-    ) external onlyGovernance {
+    ) external {
         require(
             _interestPlatformRate < 10_000,
             "The maximum ratio has been exceeded."
@@ -270,20 +254,18 @@ contract QuadraticBorrowCompound is
     function setSettlementBorrowAuth(
         address _user,
         bool _flag
-    ) external onlyGovernance {
+    ) external {
         settlementBorrowAuth[_user] = _flag;
         emit setSettlementBorrowAuthEvent(msg.sender, _user, _flag);
     }
 
-    function pausePool(uint256 _pid) external onlyRole(PAUSER_ROLE) {
+    function pausePool(uint256 _pid) external {
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[_pid];
-        _grantRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _borrowPool.token);
         emit PausePoolEvent(msg.sender, _pid, true);
     }
 
-    function unpausePool(uint256 _pid) external onlyGovernance {
+    function unpausePool(uint256 _pid) external {
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[_pid];
-        _revokeRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _borrowPool.token);
         emit PausePoolEvent(msg.sender, _pid, false);
     }
 
@@ -310,7 +292,7 @@ contract QuadraticBorrowCompound is
         address special721,
         uint256 rate,
         string memory name
-    ) external onlyGovernance {
+    ) external {
         require(rate < 1000, "The maximum ratio has been exceeded.");
         uint256 beforeRate = special721Info[special721].rate;
 
@@ -339,7 +321,7 @@ contract QuadraticBorrowCompound is
     function setBorrowPoolOverdueRate(
         uint256 pid,
         uint256 overdueRate
-    ) external onlyGovernance {
+    ) external {
         CompoundBorrowPool storage _borrowPool = borrowPoolInfo[pid];
         uint256 beforeOverdueRate = _borrowPool.overdueRate;
         _borrowPool.overdueRate = overdueRate;
@@ -351,7 +333,7 @@ contract QuadraticBorrowCompound is
         );
     }
 
-    function setFunder(address _funder) external onlyGovernance {
+    function setFunder(address _funder) external {
         address _beforeVal = funder;
         funder = _funder;
         emit SetFunderEvent(msg.sender, _beforeVal, _funder);
@@ -360,12 +342,11 @@ contract QuadraticBorrowCompound is
     function funderClaim(
         uint256 _pid,
         uint256 _amount
-    ) external onlyFunderVistor {
+    ) external {
         uint256 _totalAmount = funderPoolInterest[_pid];
         require(_totalAmount >= _amount, "Wrong amount.");
         funderPoolInterest[_pid] = funderPoolInterest[_pid].sub(_amount);
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[_pid];
-        checkPoolPause(_borrowPool.token);
 
         IERC20(_borrowPool.token).safeTransfer(funder, _amount);
 
@@ -376,9 +357,7 @@ contract QuadraticBorrowCompound is
         uint256 pid,
         address toUser,
         uint256 interests
-    ) external onlyLendVistor {
-        checkPoolPause(borrowPoolInfo[pid].token);
-
+    ) external {
         IERC20(borrowPoolInfo[pid].token).safeTransfer(toUser, interests);
         emit TransferInterestToLendEvent(msg.sender, pid, toUser, interests);
     }
@@ -406,10 +385,9 @@ contract QuadraticBorrowCompound is
         uint256 pid,
         uint256 tokenId,
         uint256 borrowAmount
-    ) public authContractAccessChecker nonReentrant whenNotPaused {
+    ) public {
         BorrowUserInfo storage _user = borrowUserInfos[msg.sender][pid];
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[pid];
-        checkPoolPause(_borrowPool.token);
 
         (uint256 _value, ) = uniswapV3Oracle.getTWAPQuoteNft(
             tokenId,
@@ -438,7 +416,6 @@ contract QuadraticBorrowCompound is
                 // borrowType: 1,
                 tokenId: tokenId,
                 borrowValue: _value,
-                auctionValue: 0,
                 amount: borrowAmount,
                 repaidAmount: 0,
                 startBowShare: _borrowPool.globalBowShare,
@@ -478,14 +455,13 @@ contract QuadraticBorrowCompound is
     function userReturn(
         uint256 bid,
         uint256 repayAmount
-    ) public authContractAccessChecker nonReentrant whenNotPaused {
+    ) public {
         // 2021-1-18 when the collateral is to be cleared and transferred to auction, repayment can be carried out
         // require(!isBorrowOverdue(bid), 'borrow is overdue');
         BorrowInfo storage _borrowInfo = borrowInfo[bid];
         require(_borrowInfo.user == msg.sender, "not owner");
 
         CompoundBorrowPool memory _borrowPool = borrowPoolInfo[_borrowInfo.pid];
-        checkPoolPause(_borrowPool.token);
 
         BorrowUserInfo storage _user = borrowUserInfos[msg.sender][
             _borrowInfo.pid
@@ -578,7 +554,7 @@ contract QuadraticBorrowCompound is
     function applyRate(
         address special721,
         uint256 tokenId
-    ) external nonReentrant whenNotPaused {
+    ) external {
         uint256 _confRate = special721Info[special721].rate;
         require(_confRate > 0, "This 721 Contract not setting.");
         userApplyRate[msg.sender].apply721Address = special721;
@@ -621,7 +597,7 @@ contract QuadraticBorrowCompound is
 
     function transferToAuction(
         uint256 bid
-    ) external nonReentrant whenNotPaused {
+    ) external {
         require(isBorrowOverdue(bid), "can not auction now");
 
         BorrowInfo storage _borrowInfo = borrowInfo[bid];
@@ -632,7 +608,6 @@ contract QuadraticBorrowCompound is
         CompoundBorrowPool storage _borrowPool = borrowPoolInfo[
             _borrowInfo.pid
         ];
-        checkPoolPause(_borrowPool.token);
 
         BorrowUserInfo storage _user = borrowUserInfos[_userAddr][
             _borrowInfo.pid
@@ -661,22 +636,6 @@ contract QuadraticBorrowCompound is
             _borrowInfo.amount
         );
 
-        (uint256 _value, ) = uniswapV3Oracle.getTWAPQuoteNft(
-            _borrowInfo.tokenId,
-            _borrowPool.token
-        );
-
-        _borrowInfo.auctionValue = _value;
-
-        IQuadraticAuction(quadraticAuction).toAuction(
-            address(uniswapV3),
-            _borrowInfo.tokenId,
-            bid,
-            _borrowPool.token,
-            _borrowInfo.auctionValue,
-            _borrowInfo.interests
-        );
-
         uniswapV3.transferFrom(
             address(this),
             quadraticAuction,
@@ -688,14 +647,13 @@ contract QuadraticBorrowCompound is
 
     function settlementBorrow(
         uint256 bid
-    ) public onlySettlementVistor nonReentrant whenNotPaused {
+    ) public onlySettlementVistor {
         BorrowInfo storage _borrowInfo = borrowInfo[bid];
         require(_borrowInfo.state == 9, "error status");
 
         CompoundBorrowPool storage _borrowPool = borrowPoolInfo[
             _borrowInfo.pid
         ];
-        checkPoolPause(_borrowPool.token);
 
         _borrowInfo.state = 8;
         _borrowInfo.returnBlock = block.number;
@@ -761,13 +719,6 @@ contract QuadraticBorrowCompound is
         }
 
         return _pendingReturnInterests(bid);
-    }
-
-    function checkPoolPause(address _token) public view {
-        require(
-            !hasRole(keccak256("VAR_PAUSE_POOL_ACCESS_ROLE"), _token),
-            "This pool has been suspended."
-        );
     }
 
     function _pendingReturnInterests(

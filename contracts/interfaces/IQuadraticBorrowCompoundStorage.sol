@@ -18,7 +18,6 @@ interface IQuadraticBorrowCompoundStorage {
         // uint256 borrowType;     //1.v3 nft
         uint256 tokenId;
         uint256 borrowValue;
-        uint256 auctionValue;
         uint256 amount;
         uint256 repaidAmount;
         uint256 startBowShare;
