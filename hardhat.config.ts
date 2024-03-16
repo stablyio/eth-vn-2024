@@ -4,6 +4,7 @@ import "@openzeppelin/hardhat-upgrades";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "dotenv/config";
+import "hardhat-laika";
 import { getMnemonic } from "./utils/account";
 
 const config: HardhatUserConfig = {

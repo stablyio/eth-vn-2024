@@ -43,3 +43,10 @@ deploy-contract.linea.testnet: deploy-contract
 run.local-node:
 	@echo "Running local node..."
 	@yarn hardhat node --no-deploy
+
+sync-laika:
+	@if [ "$(contract)" = "" ]; then \
+		echo "Must provide 'contract' argument"; \
+		exit 1; \
+	fi
+	@yarn hardhat laika-sync --contract $(contract)
