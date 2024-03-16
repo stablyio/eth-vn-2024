@@ -128,7 +128,7 @@ export async function walletSwitchToLineaNetwork() {
       params: [{ chainId: chainIDHex }],
     });
   } catch (err) {
-    console.log('err',)
+    console.log('err', err)
     // This error code indicates that the chain has not been added to MetaMask
     if (err.code === 4902) {
       await window.ethereum.request({
