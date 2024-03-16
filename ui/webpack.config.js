@@ -32,8 +32,7 @@ module.exports = {
       {
         test: /\.svg$/,
         use: ["@svgr/webpack", "url-loader"],
-      },
-      { test: /\.json$/, use: ['file-loader'] },
+      }
     ],
   },
   resolve: {
