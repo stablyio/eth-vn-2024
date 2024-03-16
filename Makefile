@@ -9,9 +9,9 @@ hardhat.init:
 	@yarn hardhat init
 
 lint:
-	@echo "Reformatting..."
+	@echo "Reformatting smart contract..."
 	@yarn prettier
-	@echo "Linting..."
+	@echo "Linting check smart contract..."
 	@solhint "contracts/**/*.sol"
 
 compile:
