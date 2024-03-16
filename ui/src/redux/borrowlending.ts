@@ -2,6 +2,7 @@ import { getQuadraticLendingCompound } from "@/abi/borrowLendingCompound";
 import { getProvider, sendTransaction } from "@/libs/providers";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BigNumber } from "ethers";
+import { WalletState } from "./wallet";
 
 export interface BorrowLendingState {
   contractAddress: string;
@@ -51,7 +52,7 @@ export const userLend = createAsyncThunk<
   {},
   { lpTokenAddress: string; amount: number },
   {
-    state: { borrowLending: BorrowLendingState };
+    state: { borrowLending: BorrowLendingState; wallet: WalletState };
     rejectValue: { error: string };
   }
 >(
@@ -71,13 +72,22 @@ export const userLend = createAsyncThunk<
       return rejectWithValue({ error: "No provider" });
     }
 
+    const walletAddress = getState().wallet.address;
+
     const lendingContract = getQuadraticLendingCompound(
       contractAddress,
       provider
     );
-    console.log('lpTokenAddress', lpTokenAddress)
-    const transaction = await lendingContract.populateTransaction.userLend(lpTokenAddress, BigNumber.from(amount));
-    await sendTransaction(transaction);
+    //TODO: Get pool ID from lpTokenAddress
+    const poolIdFromToken = 0;
+    const transaction = await lendingContract.populateTransaction.userLend(
+      poolIdFromToken,
+      BigNumber.from(amount)
+    );
+    await sendTransaction({
+      ...transaction,
+      from: walletAddress,
+    });
 
     return {};
   }

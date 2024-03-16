@@ -7,6 +7,7 @@ import { Grid } from "@mui/material";
 import { SupplyMarket } from "../SupplyMarket";
 import { Provider } from "react-redux";
 import { store } from "../../store";
+import { BorrowMarket } from "../BorrowMarket";
 // The startup page for displaying every features of the app
 export function App() {
   return (
@@ -35,7 +36,7 @@ export function App() {
                   <SupplyMarket />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <p>List</p>
+                  <BorrowMarket /> 
                 </Grid>
               </Grid>
             </RootLayout>
