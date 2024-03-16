@@ -1,10 +1,8 @@
-import { ethers, network } from "hardhat";
+import { ethers } from "hardhat";
 import {
     MyToken,
   } from "../typechain-types";
-
-export const MyTokenAddress = "0x0165878a594ca255338adfa4d48449f69242eb8f";
-export const LendingCompoundProxy = "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82";
+import { LendingCompound, MyTokenAddress } from "./constants";
 
 async function main() {
     const [signer, trader] = await ethers.getSigners();
@@ -16,10 +14,17 @@ async function main() {
 
     const lending = await ethers.getContractAt(
         "QuadraticLendCompound",
-        LendingCompoundProxy
+        LendingCompound
     )
 
     await lending.addPool(myToken, true)
+
+    const poolLen = await lending.getPoolLength();
+
+    console.log('pool length', poolLen, Number(poolLen));
+
+    const poolInfo = await lending.lendPoolInfo(Number(poolLen) - 1);
+    console.log(`poolInfo: ${poolInfo}`)
 }
 
 main().catch((error) => {
