@@ -7,13 +7,14 @@ import { MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 import { CssBaseline, Grid, ThemeProvider, createTheme } from "@mui/material";
 import { store } from "../../store";
 import { SupplyBorrowPanel } from "./SupplyBorrowPanel";
+import { WalletPanel } from "./WalletPanel";
 
 const darkTheme = createTheme({
   palette: {
     // mode: "dark",
     primary: {
-      'main': '#ab00ff'
-    }
+      main: "#ab00ff",
+    },
   },
 });
 
@@ -42,7 +43,17 @@ export function App() {
           >
             <Provider store={store}>
               <RootLayout>
-                <SupplyBorrowPanel />
+                <div style={{ marginBottom: "-4rem" }}>
+                  <WalletPanel />
+                </div>
+                <div
+                  style={{
+                    marginLeft: "30px",
+                    marginRight: "30px",
+                  }}
+                >
+                  <SupplyBorrowPanel />
+                </div>
               </RootLayout>
             </Provider>
           </MetaMaskUIProvider>

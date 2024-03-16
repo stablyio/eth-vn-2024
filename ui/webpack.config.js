@@ -6,7 +6,7 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "build"),
-    assetModuleFilename: 'images/[hash][ext][query]'
+    assetModuleFilename: "images/[hash][ext][query]",
   },
   module: {
     rules: [
@@ -31,15 +31,16 @@ module.exports = {
         ],
       },
       {
-        test: /\.svg$/,
-        use: ["@svgr/webpack", "url-loader"],
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif)$/i,
         type: "asset/resource",
         generator: {
           filename: "images/[hash][ext][query]",
         },
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: ["@svgr/webpack"],
       },
     ],
   },
@@ -53,6 +54,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html"),
     }),
+    
   ],
   devServer: {
     static: {

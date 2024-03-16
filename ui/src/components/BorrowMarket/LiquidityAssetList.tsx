@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { walletSlice } from "@/redux/wallet";
 import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
 import { AssetNumber } from "../Asset/AssetNumber";
+import { PanelRow } from "../Panel/Panel";
 
 export interface UniswapV3LPListProps {
   erc20LiquidityAssets: ERC20LiquidityAsset[];
@@ -18,7 +19,6 @@ export function useLiquidityAssetList() {
     walletSlice.selectors.getAddress(state)
   );
 
-  
   return {};
 }
 
@@ -29,7 +29,7 @@ export function LiquidityAssetList({
   const {} = useLiquidityAssetList();
 
   return (
-    <div>
+    <PanelRow>
       {erc20LiquidityAssets.map((uniswapV3LP) => {
         return (
           <Grid
@@ -40,15 +40,20 @@ export function LiquidityAssetList({
             columnSpacing={3}
           >
             <Grid item xs={3}>
-              <AssetBanner assetTicket={uniswapV3LP.symbol} name={uniswapV3LP.name} />
+              <AssetBanner
+                assetTicket={uniswapV3LP.symbol}
+                name={uniswapV3LP.name}
+                logoName={uniswapV3LP.logoName}
+              />
             </Grid>
             <Grid item xs={6} textAlign="end">
               <AssetNumber>{"0"}</AssetNumber> {uniswapV3LP.symbol}
             </Grid>
             <Grid item xs={3}>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
+                size="small"
                 // disabled={false || !allBalances[uniswapV3LP.address]}
                 onClick={() => borrowOnClick(uniswapV3LP.address)}
               >
@@ -58,6 +63,6 @@ export function LiquidityAssetList({
           </Grid>
         );
       })}
-    </div>
+    </PanelRow>
   );
 }

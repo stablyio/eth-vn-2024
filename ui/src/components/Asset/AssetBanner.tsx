@@ -1,18 +1,18 @@
-import { Typography } from '@mui/material';
 import React from 'react';
-// import Icon from "cryptocurrency-icons";
-// import Icon from "react-crypto-icons";
+import { Typography } from '@mui/material';
+import { Icon } from '../SvgIcon';
 
 export interface AssetBannerProps {
   assetTicket: string;
   name: string;
+  logoName: string;
 }
-export function AssetBanner({ assetTicket, name }: AssetBannerProps) {
+export function AssetBanner({ name, logoName }: AssetBannerProps) {
   return (
-    <span>
-      {/* <Icon name={assetTicket} size={25} /> */}
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <Icon name={logoName} style={{ maxWidth: "32px", marginRight: "8px" }} />
       
-      <Typography noWrap>{name}</Typography>
-    </span>
+      <Typography noWrap component="span">{name}</Typography>
+    </div>
   );
 }

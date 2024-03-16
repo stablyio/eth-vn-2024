@@ -2,7 +2,7 @@ import { Box, styled } from "@mui/material";
 
 export const Panel = styled('div')(({}) => ({
   background: "#ffffff",
-  boxShadow: "0px 2px 4px rgba(16, 21, 24, 0.05)",
+  boxShadow: "6px 6px 6px rgba(16, 21, 24, 0.05)",
   borderRadius: "4px",
   marginBottom: "1.33rem",
 }));
@@ -27,3 +27,7 @@ export const PanelLabel = styled('div')(() => ({
 export const PanelLabelText = styled('label')(() => ({
   color: "#AAB8C1",
 }))
+
+export const PanelRow = styled('div')(() => ({  
+  padding: "12px"
+}));

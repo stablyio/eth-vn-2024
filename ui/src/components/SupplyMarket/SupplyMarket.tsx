@@ -27,32 +27,30 @@ export function SupplyMarket() {
   return (
     <Panel>
       <PanelHeader>
-        <h4>Supply Markets</h4>
+        <h4 style={{ margin: "0px" }}>Supply Markets</h4>
       </PanelHeader>
       <h4>Collteral your LSDs position(s) to borrowing assets.</h4>
       <PanelLabel>
         <Grid container alignItems="center" justifyContent="center">
-          <Grid item xs={3} padding={0}>
+          <Grid item xs={6} padding={0}>
             <PanelLabelText>Asset</PanelLabelText>
           </Grid>
-          <Grid item xs={6} textAlign="end">
+          <Grid item xs={4} textAlign="end">
             <PanelLabelText>Wallet balance</PanelLabelText>
           </Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={2}></Grid>
         </Grid>
       </PanelLabel>
-      <div>
-        <UniswapV3LPList
-          uniswapV3LPList={getUniswapV3LPList()}
-          supplyOnClick={supplyOnClick}
-        />
-        <SupplyModal
-          isOpen={open}
-          handleClose={handleClose}
-          contractAddress={selectedContractAddress}
-          handleSupply={handleSupplyClicked}
-        />
-      </div>
+      <UniswapV3LPList
+        uniswapV3LPList={getUniswapV3LPList()}
+        supplyOnClick={supplyOnClick}
+      />
+      <SupplyModal
+        isOpen={open}
+        handleClose={handleClose}
+        contractAddress={selectedContractAddress}
+        handleSupply={handleSupplyClicked}
+      />
     </Panel>
   );
 }

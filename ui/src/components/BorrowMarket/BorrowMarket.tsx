@@ -41,7 +41,7 @@ export function BorrowMarket() {
   return (
     <Panel>
       <PanelHeader>
-        <h4>Borrow Markets</h4>
+        <h4 style={{ margin: "0px" }}>Borrow Markets</h4>
       </PanelHeader>
       <h4>To borrow you need to supply any asset to be used as collateral.</h4>
       <PanelLabel>

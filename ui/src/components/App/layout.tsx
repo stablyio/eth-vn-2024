@@ -12,8 +12,8 @@ export default function RootLayout({
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        marginLeft: "30px",
-        marginRight: "30px",
+        // marginLeft: "30px",
+        // marginRight: "30px",
       }}
     >
       <Header />

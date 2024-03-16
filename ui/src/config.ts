@@ -14,6 +14,7 @@ export interface UniswapV3LP {
   name: string;
   symbol: string;
   decimals: number;
+  logoName: string;
 }
 
 export interface ERC20LiquidityAsset {
@@ -22,6 +23,7 @@ export interface ERC20LiquidityAsset {
   symbol: string;
   decimals: number;
   lendingPoolId: number;
+  logoName: string;
 }
 
 export interface LendingBorrowContract {
@@ -70,6 +72,7 @@ export const CurrentConfig: AppConfig = {
           name: "Pancake V3 ETH/USDC Positions NFT-LP",
           symbol: "ETH/USDC",
           decimals: 0,
+          logoName: "eth",
         },
       ],
       erc20LiquidityAssets: [
@@ -79,6 +82,7 @@ export const CurrentConfig: AppConfig = {
           symbol: "USDC",
           decimals: 6,
           lendingPoolId: 2,
+          logoName: "usdc",
         },
       ],
     },
@@ -98,6 +102,7 @@ export const CurrentConfig: AppConfig = {
           name: "Pancake V3 ETH/USDC Positions NFT-LP",
           symbol: "ETH/USDC POS",
           decimals: 0,
+          logoName: "eth",
         },
       ],
       erc20LiquidityAssets: [
@@ -107,6 +112,7 @@ export const CurrentConfig: AppConfig = {
           symbol: "USDC",
           decimals: 6,
           lendingPoolId: 2,
+          logoName: "usdc",
         },
       ],
     },

@@ -86,11 +86,11 @@ export const borrowLending = createSlice({
     );
     builder.addCase(getLendingPoolOfCurrentWallet.rejected, (state, action) => {
       state.loading = false;
-      if (action.payload) {
-        state.errorMessage = action.payload.error;
-      } else {
-        state.errorMessage = action.error.message;
-      }
+      // if (action.payload) {
+      //   state.errorMessage = action.payload.error;
+      // } else {
+      //   state.errorMessage = action.error.message;
+      // }
     });
   },
   selectors: {
@@ -155,7 +155,7 @@ export const getLendingPoolOfCurrentWallet = createAsyncThunk<
     return rejectWithValue({ error: "No wallet address" });
   }
 
-  const poolId = 0;
+  const poolId = 2;
   const lendPool: CompoundLendPool = await lendingContract.lendUserInfos(
     walletAddress,
     poolId
