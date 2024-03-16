@@ -32,9 +32,9 @@ export function BorrowMarket() {
   };
 
   return (
-    <div>
-      <h1>Borrow Markets</h1>
-      <h3>To borrow you need to supply any asset to be used as collateral.</h3>
+    <div className={styles.borrowMarketPanel}>
+      <h3>Borrow Markets</h3>
+      <h4>To borrow you need to supply any asset to be used as collateral.</h4>
       <div>
         <Grid
           container

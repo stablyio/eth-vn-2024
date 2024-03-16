@@ -1,6 +1,12 @@
 .tableHeader {
-    background-color: #E7E7E9;
+    background-color: rgb(25 27 31);
     vertical-align: middle;
     display: table-row;
     outline: 0;
+}
+
+.borrowMarketPanel {
+    /* background-color: ; */
+    border-color: white;/*rgb(53 57 70);*/
+    border-width: 1px;
 }

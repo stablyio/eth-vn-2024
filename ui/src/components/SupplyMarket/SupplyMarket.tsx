@@ -36,8 +36,8 @@ export function SupplyMarket() {
 
   return (
     <div>
-      <h1>Supply Markets</h1>
-      <h3>Collteral your LSDs position(s) to borrowing assets.</h3>
+      <h3>Supply Markets</h3>
+      <h4>Collteral your LSDs position(s) to borrowing assets.</h4>
       <div>
         <Grid
           container
