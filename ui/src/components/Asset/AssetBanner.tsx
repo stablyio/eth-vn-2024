@@ -9,7 +9,7 @@ export interface AssetBannerProps {
 }
 export function AssetBanner({ name, logoName }: AssetBannerProps) {
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: "flex", width: "100%" }}>
       <Icon name={logoName} style={{ maxWidth: "32px", marginRight: "8px" }} />
       
       <Typography noWrap component="span">{name}</Typography>

@@ -24,9 +24,14 @@ export function SupplyForm({
   return (
     <Stack>
       <AssetInput num={value} onChange={setValue} asset={asset} />
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <p>Supplyable amount</p>
-        <p>{availableAmount}</p>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ marginTop: "1rem" }}
+      >
+        <span>Wallet Balance</span>
+        <span>{availableAmount ?? "0"}</span>
       </Stack>
       {errorMessage && (
         <Alert severity="error" sx={{ marginBottom: "10px" }}>
@@ -34,11 +39,14 @@ export function SupplyForm({
         </Alert>
       )}
       <LoadingButton
-        variant="outlined"
+        variant="contained"
         loading={isLoading}
-        sx={supplyButtonStyle}
+        // sx={supplyButtonStyle}
         onClick={() => {
           onSupply && onSupply(value);
+        }}
+        style={{
+          marginTop: "1rem",
         }}
       >
         SUPPLY

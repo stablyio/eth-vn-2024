@@ -1,4 +1,4 @@
-import { Box, Modal, Tab, Tabs } from "@mui/material";
+import { Box, Modal, Stack, Tab, Tabs } from "@mui/material";
 import { SupplyForm } from "./SupplyForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { walletSlice } from "@/redux/wallet";
@@ -6,6 +6,7 @@ import { borrowLending } from "@/redux/borrowlending";
 import { useState } from "react";
 import { CustomTabPanel } from "../Tab/TabGroup";
 import { UniswapV3LP } from "@/config";
+import { AssetBanner } from "../Asset";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,8 +17,8 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
-  color: "black"
+  color: "black",
+  padding: "0px",
 };
 
 export interface SupplyModalProps {
@@ -54,6 +55,7 @@ export function SupplyModal({
   const changeTabValue = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+  console.log('balanceOfAddress', balanceOfAddress)
 
   return (
     <Modal
@@ -63,6 +65,14 @@ export function SupplyModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+        <Stack alignItems="center" sx={{ margin: "12px" }}>
+          {uniswapV3LP && (
+            <AssetBanner
+              name={uniswapV3LP.name}
+              logoName={uniswapV3LP.logoName}
+            />
+          )}
+        </Stack>
         <Tabs
           value={tabValue}
           onChange={changeTabValue}
