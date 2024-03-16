@@ -70,14 +70,24 @@ The log message will be showed in the local network console.
 After adding the log messages, we can run the local node (check the Deployment section) and run a script to call the `set` function:
 
 ```typescript
-import { ethers } from "hardhat";
+import hre from "hardhat";
 
 async function main() {
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy();
+  const contract = await hre.ethers.getContractFactory("QuadraticLendCompound");
+  const deployedContract = await contract.deploy(arg1, arg2, ...);
 
-  await lock.deployed();
-  console.log("Lock deployed to:", lock.address);
-
-  await lock.set(42);
+  const res = await deployedContract.set(
+    20, // _value
+    {
+      gasLimit: 15000000
+    },
+  );
 }
+
+main()
+  .then(() => process.exit(0))
+  .catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
+```
