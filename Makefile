@@ -18,6 +18,10 @@ compile:
 	@echo "Compiling..."
 	@yarn hardhat compile
 
+test.contract:
+	@echo "Running tests..."
+	@yarn hardhat test
+
 deploy-contract:
 	@if [ "$(network)" = "" ]; then \
 		echo "Must provide 'network' argument"; \
