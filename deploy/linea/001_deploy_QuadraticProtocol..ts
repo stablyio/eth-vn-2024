@@ -26,18 +26,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   );
 
   // Initialize the core contracts
+  console.log("---------------------------------");
+  console.log("Initializing QuadraticBorrowCompound");
   const borrowContract = await hre.ethers.getContractAt(
     "QuadraticBorrowCompound",
     borrowDeployed.address,
-    getWallet(hre),
   );
-  const lendContract = await hre.ethers.getContractAt(
-    "QuadraticLendCompound",
-    lendDeployed.address,
-    getWallet(hre),
-  );
-
-  await borrowContract.doInitialize(
+  const borrowInit = await borrowContract.doInitialize(
     ZeroAddress,
     uniswapV2OracleDeployed.address,
     lendDeployed.address,
@@ -45,11 +40,26 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     650,
     1000,
   )
-  await lendContract.doInitialize(
+  const borrowInitRes = await borrowInit.wait()
+  console.log("  - Hash:", borrowInitRes?.hash);
+  console.log("  - GasUsed:", borrowInitRes?.gasUsed.toString());
+  console.log("---------------------------------");
+
+  console.log("---------------------------------");
+  console.log("Initializing QuadraticLendCompound");
+  const lendContract = await hre.ethers.getContractAt(
+    "QuadraticLendCompound",
+    lendDeployed.address,
+  );
+  const lendInit = await lendContract.doInitialize(
     borrowDeployed.address,
     650,
     1000,
   )
+  const lendInitRes = await lendInit.wait()
+  console.log("  - Hash:", lendInitRes?.hash);
+  console.log("  - GasUsed:", lendInitRes?.gasUsed.toString());
+  console.log("---------------------------------");
 
   // Deploy the proxies
   await deployContract(
