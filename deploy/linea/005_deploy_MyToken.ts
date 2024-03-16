@@ -4,7 +4,7 @@ import { deployContract } from "../../utils/deploy";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { network } = hre;
-  if (network.name == "hardhat") {
+  if (network.name == "localhost") {
     // Deploy the core contract
     await deployContract(
       "MyToken",
