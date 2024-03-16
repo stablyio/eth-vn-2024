@@ -21,6 +21,7 @@ export interface ERC20LiquidityAsset {
   name: string;
   symbol: string;
   decimals: number;
+  lendingPoolId: number;
 }
 
 export interface LendingBorrowContract {
@@ -45,7 +46,7 @@ export interface AppConfig {
 }
 
 export const CurrentConfig: AppConfig = {
-  env: Environment.LOCAL,
+  env: Environment.BETA,
   wallet: {
     address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
     privateKey:
@@ -77,13 +78,14 @@ export const CurrentConfig: AppConfig = {
           name: "USDC",
           symbol: "USDC",
           decimals: 6,
+          lendingPoolId: 0,
         },
       ],
     },
     [Environment.BETA]: {
       lendingBorrowContract: {
-        lendingContractAddress: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-        borrowContractAddress: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        lendingContractAddress: "0xf7C03A3f069fAc43AF81aEf3F3D3a69ac1444b68",
+        borrowContractAddress: "0x8D136BA56d165473257D366585B41257acD89b3a",
       },
       lineaNetworkConfig: {
         networkName: "Linea Testnet",
@@ -104,6 +106,7 @@ export const CurrentConfig: AppConfig = {
           name: "USDC",
           symbol: "USDC",
           decimals: 6,
+          lendingPoolId: 0,
         },
       ],
     },
