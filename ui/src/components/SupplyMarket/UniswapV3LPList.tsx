@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { AssetBanner } from "../Asset";
 import { UniswapV3LP } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -66,10 +66,12 @@ export function UniswapV3LPList({
               />
             </Grid>
             <Grid item xs={4} textAlign="end">
+              <div>
               <AssetNumber>
                 {allReadableBalances[uniswapV3LP.address] ?? "0"}
               </AssetNumber>{" "}
-              {uniswapV3LP.symbol}
+              <Typography noWrap component="span">{uniswapV3LP.symbol}</Typography>
+              </div>
             </Grid>
             <Grid item xs={2} textAlign="end">
               <Button

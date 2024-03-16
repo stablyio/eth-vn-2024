@@ -10,8 +10,10 @@ const Title = styled("div")({
   fontSize: "1.5rem",
 });
 const WalletPanelWrapper = styled("div")({
-  backgroundColor: "#ab00ff",
   height: "300px",
+  backgroundColor: "#ab00ff",
+  backgroundImage: "radial-gradient(circle at center center, #ffffff, #ab00ff), repeating-radial-gradient(circle at center center, #ffffff, #ffffff, 10px, transparent 20px, transparent 10px)",
+  backgroundBlendMode: "multiply",
 });
 export function WalletPanel() {
   const currentNetworkConfig = getCurrentNetworkConfig();
@@ -27,7 +29,7 @@ export function WalletPanel() {
           <div>0</div>
         </BalanceWrapper>
         <BalanceWrapper>
-          <Title sx={{color: "black"}}>Borrow Balance</Title>
+          <Title sx={{ color: "black" }}>Borrow Balance</Title>
           <div>0</div>
         </BalanceWrapper>
       </div>

@@ -37,7 +37,11 @@ export function LiquidityAssetList({
             alignItems="center"
             justifyContent="center"
             key={uniswapV3LP.address}
-            columnSpacing={3}
+            columnSpacing={2}
+            rowSpacing={2}
+            sx={{
+              marginTop: "0px",
+            }}
           >
             <Grid item xs={6}>
               <AssetBanner
