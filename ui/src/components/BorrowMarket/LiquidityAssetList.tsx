@@ -8,7 +8,7 @@ import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
 
 export interface UniswapV3LPListProps {
   erc20LiquidityAssets: ERC20LiquidityAsset[];
-  supplyOnClick: (contractAddress: string) => void;
+  borrowOnClick: (contractAddress: string) => void;
 }
 
 export function useLiquidityAssetList() {
@@ -23,7 +23,7 @@ export function useLiquidityAssetList() {
 
 export function LiquidityAssetList({
   erc20LiquidityAssets,
-  supplyOnClick,
+  borrowOnClick,
 }: UniswapV3LPListProps) {
   const {} = useLiquidityAssetList();
 
@@ -48,7 +48,7 @@ export function LiquidityAssetList({
                 variant="contained"
                 color="primary"
                 // disabled={false || !allBalances[uniswapV3LP.address]}
-                onClick={() => supplyOnClick(uniswapV3LP.address)}
+                onClick={() => borrowOnClick(uniswapV3LP.address)}
               >
                 Borrow
               </Button>

@@ -1,19 +1,11 @@
 import React from "react";
-import { Box, Grid, styled } from "@mui/material";
-import styles from "./supplymarket.module.css";
+import { Grid } from "@mui/material";
 import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { UniswapV3LPList } from "./UniswapV3LPList";
 import { getUniswapV3LPList } from "@/config";
 import { useAppDispatch } from "@/store";
 import { userLend } from "@/redux/borrowlending";
-
-const Item = styled(Box)(({ theme }) => ({
-  // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import { Panel, PanelHeader, PanelLabel, PanelLabelText } from "../Panel/Panel";
 
 export function SupplyMarket() {
   const [open, setOpen] = React.useState(false);
@@ -22,8 +14,6 @@ export function SupplyMarket() {
     React.useState("");
   const dispatch = useAppDispatch();
 
- 
- 
   const supplyOnClick = (contractAddress: string) => {
     setSelectedContractAddress(contractAddress);
     setOpen(true);
@@ -35,27 +25,22 @@ export function SupplyMarket() {
   };
 
   return (
-    <div>
-      <h3>Supply Markets</h3>
+    <Panel>
+      <PanelHeader>
+        <h4>Supply Markets</h4>
+      </PanelHeader>
       <h4>Collteral your LSDs position(s) to borrowing assets.</h4>
-      <div>
-        <Grid
-          container
-          className={styles.tableHeader}
-          alignItems="center"
-          justifyContent="center"
-        >
+      <PanelLabel>
+        <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={3} padding={0}>
-            <Item>Asset</Item>
+            <PanelLabelText>Asset</PanelLabelText>
           </Grid>
           <Grid item xs={6}>
-            Wallet balance
+            <PanelLabelText>Wallet balance</PanelLabelText>
           </Grid>
-          <Grid item xs={3}>
-            Actions
-          </Grid>
+          <Grid item xs={3}></Grid>
         </Grid>
-      </div>
+      </PanelLabel>
       <div>
         <UniswapV3LPList
           uniswapV3LPList={getUniswapV3LPList()}
@@ -68,6 +53,6 @@ export function SupplyMarket() {
           handleSupply={handleSupplyClicked}
         />
       </div>
-    </div>
+    </Panel>
   );
 }

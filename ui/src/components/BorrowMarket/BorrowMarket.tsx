@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Box, Grid, styled } from "@mui/material";
 import styles from "./borrowmarket.module.css";
-import { SupplyModal } from "../SupplyModal/SupplyModal";
 import { LiquidityAssetList } from "./LiquidityAssetList";
-import { CurrentConfig, getErc20LiquidityAssets, getUniswapV3LPList } from "@/config";
+import { getErc20LiquidityAssets } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getLendingPoolOfCurrentWallet } from "@/redux/borrowlending";
+import { BorrowModal } from "../BorrowModal/BorrowModal";
+import { Panel, PanelHeader, PanelLabel } from "../Panel/Panel";
 
 const Item = styled(Box)(({ theme }) => ({
   ...theme.typography.body2,
@@ -19,18 +20,17 @@ export function BorrowMarket() {
   const handleClose = () => setOpen(false);
   const [selectedContractAddress, setSelectedContractAddress] =
     React.useState("");
-  
+
   const currentWalletAddress = useAppSelector((state) => state.wallet.address);
   const dispatch = useAppDispatch();
- 
- 
-  const supplyOnClick = (contractAddress: string) => {
+
+  const borrowOnClick = (contractAddress: string) => {
     setSelectedContractAddress(contractAddress);
     setOpen(true);
   };
 
   // Call Contract to lend the LP token
-  const handleSupplyClicked = (lpTokenAddress: string, amount: number) => {
+  const handleBorrowClicked = (lpTokenAddress: string, amount: number) => {
     // dispatch(userLend({ lpTokenAddress, amount }));
   };
 
@@ -38,40 +38,33 @@ export function BorrowMarket() {
     dispatch(getLendingPoolOfCurrentWallet());
   }, [currentWalletAddress]);
 
-
   return (
-    <div className={styles.borrowMarketPanel}>
-      <h3>Borrow Markets</h3>
+    <Panel>
+      <PanelHeader><h4>Borrow Markets</h4></PanelHeader>
       <h4>To borrow you need to supply any asset to be used as collateral.</h4>
       <div>
-        <Grid
-          container
-          className={styles.tableHeader}
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={3} padding={0}>
-            <Item>Asset</Item>
+            <PanelLabel>Asset</PanelLabel>
           </Grid>
           <Grid item xs={6}>
-            Liquidity
+            <PanelLabel>Liquidity</PanelLabel>
           </Grid>
-          <Grid item xs={3}>
-          </Grid>
+          <Grid item xs={3}></Grid>
         </Grid>
       </div>
       <div>
         <LiquidityAssetList
           erc20LiquidityAssets={getErc20LiquidityAssets()}
-          supplyOnClick={supplyOnClick}
+          borrowOnClick={borrowOnClick}
         />
-        <SupplyModal
+        <BorrowModal
           isOpen={open}
           handleClose={handleClose}
           contractAddress={selectedContractAddress}
-          handleSupply={handleSupplyClicked}
+          handleBorrow={handleBorrowClicked}
         />
       </div>
-    </div>
+    </Panel>
   );
 }

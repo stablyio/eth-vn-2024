@@ -10,7 +10,10 @@ import { SupplyBorrowPanel } from "./SupplyBorrowPanel";
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    // mode: "dark",
+    primary: {
+      'main': '#ab00ff'
+    }
   },
 });
 

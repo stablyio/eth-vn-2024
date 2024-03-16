@@ -1,9 +1,10 @@
-import { Box, Modal } from "@mui/material";
+import { Box, Modal, Tab, Tabs } from "@mui/material";
 import { SupplyForm } from "./SupplyForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { walletSlice } from "@/redux/wallet";
 import { borrowLending } from "@/redux/borrowlending";
-import { useEffect } from "react";
+import { useState } from "react";
+import { CustomTabPanel } from "../Tab/TabGroup";
 
 const style = {
   position: "absolute" as "absolute",
@@ -30,6 +31,8 @@ export function SupplyModal({
   contractAddress,
   handleSupply,
 }: SupplyModalProps) {
+  const [tabValue, setTabValue] = useState(0);
+
   const dispatch = useAppDispatch();
   // Get the ERC20 balance of the connected wallet
   const balanceOfAddress = useAppSelector((state) =>
@@ -46,6 +49,9 @@ export function SupplyModal({
     handleSupply && handleSupply(contractAddress, amount);
   };
 
+  const changeTabValue = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   return (
     <Modal
@@ -55,12 +61,25 @@ export function SupplyModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <SupplyForm
-          availableAmount={balanceOfAddress}
-          onSupply={onSupply}
-          isLoading={isLoading}
-          errorMessage={errorMessage}
-        />
+        <Tabs
+          value={tabValue}
+          onChange={changeTabValue}
+          aria-label="basic tabs example"
+        >
+          <Tab value={0} label="Supply" />
+          <Tab value={1} label="Withdraw" />
+        </Tabs>
+        <CustomTabPanel value={tabValue} index={0}>
+          <SupplyForm
+            availableAmount={balanceOfAddress}
+            onSupply={onSupply}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+          />
+        </CustomTabPanel>
+        <CustomTabPanel value={tabValue} index={1}>
+          Withdraw
+        </CustomTabPanel>
       </Box>
     </Modal>
   );
