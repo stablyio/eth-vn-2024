@@ -121,7 +121,7 @@ export function WalletPanel() {
         >
           <CenterWrapper>
             {shouldChangeNetwork ? (
-              <Button onClick={() => walletSwitchToLineaNetwork()}>
+              <Button onClick={() => walletSwitchToLineaNetwork()} sx={{color: "white"}}>
                 Switch to Linea Network
               </Button>
             ) : (
