@@ -41,8 +41,14 @@ deploy-contract.reset:
 deploy-contract.local: network=localhost
 deploy-contract.local: deploy-contract
 
+deploy-contract.local.reset: network=localhost
+deploy-contract.local.reset: deploy-contract.reset
+
 deploy-contract.linea.testnet: network=linea_testnet
 deploy-contract.linea.testnet: deploy-contract
+
+deploy-contract.linea.testnet.reset: network=linea_testnet
+deploy-contract.linea.testnet.reset: deploy-contract.reset
 
 run.local-node:
 	@echo "Running local node..."
