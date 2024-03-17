@@ -50,6 +50,12 @@ deploy-contract.linea.testnet: deploy-contract
 deploy-contract.linea.testnet.reset: network=linea_testnet
 deploy-contract.linea.testnet.reset: deploy-contract.reset
 
+deploy-contract.polygon_zk.testnet: network=polygon_zk_testnet
+deploy-contract.polygon_zk.testnet: deploy-contract
+
+deploy-contract.polygon_zk.testnet.reset: network=polygon_zk_testnet
+deploy-contract.polygon_zk.testnet.reset: deploy-contract.reset
+
 run.local-node:
 	@echo "Running local node..."
 	@yarn hardhat node --no-deploy

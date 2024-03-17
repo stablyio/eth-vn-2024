@@ -40,6 +40,13 @@ const config: HardhatUserConfig = {
         mnemonic: getMnemonic("linea_testnet"),
       },
     },
+    polygon_zk_testnet: {
+      url: "https://etherscan.cardona.zkevm-rpc.com/",
+      deploy: ["deploy/polygon_zk/"],
+      accounts: {
+        mnemonic: getMnemonic("polygon_zk_testnet"),
+      },
+    },
   },
 };
 
