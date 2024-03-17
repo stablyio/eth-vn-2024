@@ -11,6 +11,8 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@ethersproject/providers": "^5.7.2",
+    "@metamask/sdk-react": "^0.17.2",
+    "@metamask/sdk-react-ui": "^0.17.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/lab": "5.0.0-alpha.168",
     "@mui/material": "^5.14.5",

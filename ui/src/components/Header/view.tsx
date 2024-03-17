@@ -1,6 +1,6 @@
 import { AppBar, Box, Container, Stack, Toolbar } from "@mui/material";
 // import { MetamaskButton } from "./MetamaskButton";
-import stablyLogo from "../../../public/icons/stably_logo.png";
+import stablyLogo from "../../../public/Quadratic.png";
 
 interface HeaderProps {
   position?:

@@ -59,14 +59,17 @@ export function LiquidityAssetList({
               marginTop: "0px",
             }}
           >
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <AssetBanner
                 name={uniswapV3LP.name}
                 logoName={uniswapV3LP.logoName}
               />
             </Grid>
-            <Grid item xs={4} textAlign="end">
-              <AssetNumber>{currentLend}</AssetNumber> {uniswapV3LP.symbol}
+            <Grid item xs={2} textAlign="end">
+              <AssetNumber>0.5</AssetNumber> %
+            </Grid>
+            <Grid item xs={2} textAlign="end">
+              <AssetNumber>75</AssetNumber> %
             </Grid>
             <Grid item xs={2} textAlign="end">
               <Button

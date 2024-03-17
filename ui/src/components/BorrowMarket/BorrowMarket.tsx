@@ -70,11 +70,14 @@ export function BorrowMarket() {
         </PanelHeader>
         <PanelLabel>
           <Grid container alignItems="center" justifyContent="center">
-            <Grid item xs={6} padding={0}>
+            <Grid item xs={5} padding={0}>
               <PanelLabelText>Asset</PanelLabelText>
             </Grid>
-            <Grid item xs={4} textAlign="end">
-              <PanelLabelText>Liquidity</PanelLabelText>
+            <Grid item xs={2} textAlign="end">
+              <PanelLabelText>APR (%)</PanelLabelText>
+            </Grid>
+            <Grid item xs={2} textAlign="end">
+              <PanelLabelText>LTV (%)</PanelLabelText>
             </Grid>
             <Grid item xs={2}></Grid>
           </Grid>

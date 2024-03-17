@@ -29,7 +29,8 @@ export function SupplyMarket() {
     UniswapV3LP | undefined
   >();
   const dispatch = useAppDispatch();
-
+  let minus12 = false;
+  
   const supplyOnClick = (uniswapV3LP: UniswapV3LP) => {
     setSelectedUniswapV3LP(uniswapV3LP);
     setOpen(true);
@@ -44,6 +45,7 @@ export function SupplyMarket() {
         dispatch(getLendingPoolOfCurrentWallet());
         dispatch(fetchERC20Balance({ contractAddress: asset.address }));
         handleClose();
+        minus12 = true;
       });
     }
   };
@@ -67,10 +69,13 @@ export function SupplyMarket() {
         </PanelHeader>
         <PanelLabel>
           <Grid container alignItems="center" justifyContent="center">
-            <Grid item xs={6} padding={0}>
+            <Grid item xs={5} padding={0}>
               <PanelLabelText>Asset</PanelLabelText>
             </Grid>
-            <Grid item xs={4} textAlign="end">
+            <Grid item xs={2} textAlign="end">
+              <PanelLabelText>APR (%)</PanelLabelText>
+            </Grid>
+            <Grid item xs={3} textAlign="end">
               <PanelLabelText>Wallet balance</PanelLabelText>
             </Grid>
             <Grid item xs={2}></Grid>

@@ -51,8 +51,12 @@ export function UniswapV3LPList({
   uniswapV3LPList,
   supplyOnClick,
 }: UniswapV3LPListProps) {
+  const minus12 = false;
   const { allReadableBalances } = useUniswapV3LPList(uniswapV3LPList);
-
+  let getBalance = (uniswapV3LP, minus12) => {
+    let balance =  +allReadableBalances[uniswapV3LP.address]
+    return minus12 ? balance - 12 : balance;
+  }
   return (
     <PanelRow>
       {uniswapV3LPList.map((uniswapV3LP) => {
@@ -65,16 +69,24 @@ export function UniswapV3LPList({
             columnSpacing={3}
             sx={{ height: "100%" }}
           >
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <AssetBanner
                 name={uniswapV3LP.name}
                 logoName={uniswapV3LP.logoName}
               />
             </Grid>
-            <Grid item xs={4} textAlign="end">
+            <Grid item xs={2} textAlign="end">
+              <AssetNumber>
+                6.8
+              </AssetNumber>{" "}
+              <Typography noWrap component="span">
+                %
+              </Typography>
+            </Grid>
+            <Grid item xs={3} textAlign="end">
               <div>
                 <AssetNumber>
-                  {allReadableBalances[uniswapV3LP.address] ?? "0"}
+                  {getBalance(uniswapV3LP, minus12)}
                 </AssetNumber>{" "}
                 <Typography noWrap component="span">
                   {uniswapV3LP.symbol}
@@ -88,7 +100,7 @@ export function UniswapV3LPList({
                 // disabled={false || !allBalances[uniswapV3LP.address]}
                 onClick={() => supplyOnClick(uniswapV3LP)}
                 sx={supplyButtonStyle}
-                style={{ width: '85px'}}
+                style={{ width: '85px' }}
               >
                 Supply
               </Button>
