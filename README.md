@@ -117,3 +117,8 @@ Table:
 | QuadraticBorrowCompoundProxy  | 0x8D136BA56d165473257D366585B41257acD89b3a |
 | QuadraticLendCompoundProxy    | 0x7BbE2Fa47d999F240540ba54C5f587409098924d |
 | UniswapV3ChainLinkOracleProxy | 0xf7C03A3f069fAc43AF81aEf3F3D3a69ac1444b68 |
+
+## Solidity Scan result
+
+- https://solidityscan.com/projects/202f29a3ad857d3d62117784e4eff555/46a0a7b5e0682bb4
+- Report: https://solidityscan.com/report/project/202f29a3ad857d3d62117784e4eff555/d3736b6c6aab34ae
