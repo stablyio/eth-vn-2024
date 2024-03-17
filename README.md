@@ -1,5 +1,9 @@
 # Quadratic Protocol
 
+## Demo video
+
+- https://www.loom.com/share/be35c3b80f134a3e8be1bebd85672e03?sid=10f456ce-5eda-4f1d-a594-abb1a9199a04
+
 ## Setup
 
 ```bash
